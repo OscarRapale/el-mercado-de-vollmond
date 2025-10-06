@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 
+admin.site.site_header = "Adminstración El Mercado de Vollmond"
+admin.site.site_title = "El Mercado de Vollmond Admin"
+admin.site.index_title = "Panel de Admin El Mercado de Vollmond"
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """Admin interface for Category model"""
@@ -27,7 +31,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Basic Information", {
-            "field": ("category", "name", "slug", "description")
+            "fields": ("category", "name", "slug", "description")
         }),
         ("Pricing & Inventory", {
             "fields": ("price", "stock", "is_available")
@@ -112,7 +116,7 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = [
         "order_number",
         "idempotency_key",
-        "stripe_payment_intend_id",
+        "stripe_payment_intent_id",
         "created_at",
         "updated_at",
         "subtotal",
@@ -153,7 +157,7 @@ class OrderAdmin(admin.ModelAdmin):
                 "tax",
                 "total",
                 "stripe_payment_intent_id",
-                "idempontency_key"
+                "idempotency_key"
             )
         }),
         ("Timestamp", {

@@ -137,3 +137,7 @@ CORS_ALLOW_CREDENTIALS = True
 STRIPE_PUBLIC_KEY = config('STRIPE_PUBLIC_KEY', default='')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
+
+# Media files (uploaded by users)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
