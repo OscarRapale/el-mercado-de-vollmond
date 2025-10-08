@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Category
-        foelds = ["id", "name", "slug", "description"]
+        fields = ["id", "name", "slug", "description"]
 
 class ProductSerializer(serializers.ModelSerializer):
     """
@@ -86,6 +86,31 @@ class CartItemSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Product is not available.")
         
         return data
+    
+class CartSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Cart model
+    """
+    items = CartItemSerializer(many=True, read_only=True)
+    total_items = serializers.IntegerField(read_only=True)
+    subtotal = serializers.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        read_only=True
+    )
+    
+    class Meta:
+        model = Cart
+        fields = [
+            'id',
+            'user',
+            'items',
+            'total_items',
+            'subtotal',
+            'created_at',
+            'updated_at'
+        ]
+        read_only_fields = ['user', 'created_at', 'updated_at']
     
 class OrderItemSerializer(serializers.ModelSerializer):
     """
