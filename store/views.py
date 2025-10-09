@@ -1,6 +1,11 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view, permission_classes
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
@@ -193,3 +198,96 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [AllowAny()]
         return [IsAuthenticated()]
+
+class RegisterView(APIView):
+    """
+    User registration endpoint
+    POST /api/auth/register/
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+
+            # Automaitically log in after registration
+            login(request, user)
+
+            return Response({
+                "user": UserSerializer(user).data,
+                "message": "User registered successfully"
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class LoginView(APIView):
+    """
+    User login endpoint
+    POST /api/auth/login/
+    Body: {"username": "john", "password": "password123"}
+    """
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response(
+                {"error": "Please provide both username and password"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Login successful
+            login(request, user)
+            return Response({
+                "user": UserSerializer(user).data,
+                "message": "Login successful"
+            })
+        else:
+            # Invalid credentials
+            return Response(
+                {"error": "Invalid username or password"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        
+class LogoutView(APIView):
+    """
+    User logout endpoint
+    POST /api/auth/logout/
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        logout(request)
+        return Response({
+            'message': 'Logout successful'
+        })
+
+
+class CurrentUserView(APIView):
+    """
+    Get current logged-in user
+    GET /api/auth/user/
+    """
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_csrf_token(request):
+    """
+    Get CSRF token for frontend
+    GET /api/csrf/
+    """
+    csrf_token = get_token(request)
+    return JsonResponse({'csrfToken': csrf_token})
