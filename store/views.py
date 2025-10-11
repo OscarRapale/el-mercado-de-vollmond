@@ -1,3 +1,4 @@
+from decimal import Decimal
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,8 +7,11 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
+from .stripe_service import StripeService
+from django.db import transaction
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
+from django.conf import settings
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .serializers import (
     CategorySerializer,
@@ -169,6 +173,139 @@ class CartViewSet(viewsets.ModelViewSet):
         serializer = CartSerializer(cart)
         return Response(serializer.data)
     
+    @action(detail=False, methods=["post"])
+    def create_order(self, request):
+        """
+        POST /api/cart/create_order/
+        Create an order from cart and initiate Stripe checkout
+        
+        Body: {
+            "email": "customer@example.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "address_line1": "123 Main St",
+            "address_line2": "Apt 4",
+            "city": "New York",
+            "state": "NY",
+            "postal_code": "10001",
+            "country": "US",
+            "phone": "555-1234"
+        }
+        """
+        cart = self.get_object()
+
+        # Validate cart has items
+        if not cart.items.exists():
+            return Response(
+                {"error": "Cart is empty"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Get shipping/billing info from request
+        shipping_data = {
+            "email": request.data.get("email"),
+            "first_name": request.data.get("first_name"),
+            "last_name": request.data.get("last_name"),
+            "address_line1": request.data.get("address_line1"),
+            "address_line2": request.data.get("address_line2", ""),
+            "city": request.data.get("city"),
+            "state": request.data.get("state"),
+            "postal_code": request.data.get("postal_code"),
+            "country": request.data.get("country", "US"),
+            "phone": request.data.get("phone"),
+        }
+
+        # Validate required fields
+        required_fields = ["email", "first_name", "last_name", "address_line1",
+                        "city", "state", "postal_code", "phone"]
+        for field in required_fields:
+            if not shipping_data.get(field):
+                return Response(
+                    {"error": f"{field} is required"}
+                )
+            
+        try:
+            # Use transaction to ensure data consistency
+            with transaction.atomic():
+                # Calculate totals
+                subtotal = cart.subtotal
+                shipping_cost = Decimal("5.00")
+                tax = subtotal * Decimal("0.08")
+                total = subtotal + shipping_cost + tax
+
+                # Create order
+                order = Order.objects.create(
+                    user=request.user,
+                    email=shipping_data['email'],
+                    first_name=shipping_data['first_name'],
+                    last_name=shipping_data['last_name'],
+                    address_line1=shipping_data['address_line1'],
+                    address_line2=shipping_data['address_line2'],
+                    city=shipping_data['city'],
+                    state=shipping_data['state'],
+                    postal_code=shipping_data['postal_code'],
+                    country=shipping_data['country'],
+                    phone=shipping_data['phone'],
+                    subtotal=subtotal,
+                    shipping_cost=shipping_cost,
+                    tax=tax,
+                    total=total,
+                    status='pending',
+                    payment_status='pending',
+                )
+
+                # Create order items from cart items
+                for cart_item in cart.items.all():
+                    OrderItem.objects.create(
+                        order=order,
+                        product=cart_item.product,
+                        product_name=cart_item.product.name,
+                        product_price=cart_item.product.name,
+                        quantity=cart_item.quantity,
+                    )
+
+                    # Reduce product stock
+                    product = cart_item.product
+                    product.stock -= cart_item.quantity
+                    product.save()
+
+                # Create Stripe checkout session
+                success_url = request.data.get(
+                    'success_url', 
+                    'http://localhost:3000/order/success?session_id={CHECKOUT_SESSION_ID}'
+                )
+                cancel_url = request.data.get(
+                    'cancel_url',
+                    'http://localhost:3000/order/cancel'
+                )
+            
+                checkout_session = StripeService.create_checkout_session(
+                    order=order,
+                    success_url=success_url,
+                    cancel_url=cancel_url,
+                )
+
+                # Store Stripe session ID
+                order.stripe_payment_intent_id = checkout_session.id
+                order.save()
+            
+                # Clear the cart after order creation
+                cart.items.all().delete()
+            
+                return Response({
+                    'order_id': order.id,
+                    'order_number': order.order_number,
+                    'checkout_url': checkout_session.url,
+                    'session_id': checkout_session.id,
+                }, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint for orders
@@ -290,4 +427,15 @@ def get_csrf_token(request):
     GET /api/csrf/
     """
     csrf_token = get_token(request)
-    return JsonResponse({'csrfToken': csrf_token})
+    return JsonResponse({"csrfToken": csrf_token})
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_stripe_public_key(request):
+    """
+    Get Stripe publishable key for frontend
+    GET /api/stripe/config/
+    """
+    return Response({
+        "publicKey": settings.STRIPE_PUBLIC_KEY
+    })
