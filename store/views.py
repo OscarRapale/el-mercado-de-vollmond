@@ -7,11 +7,15 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
+import stripe
 from .stripe_service import StripeService
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
 from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .serializers import (
     CategorySerializer,
@@ -260,7 +264,7 @@ class CartViewSet(viewsets.ModelViewSet):
                         order=order,
                         product=cart_item.product,
                         product_name=cart_item.product.name,
-                        product_price=cart_item.product.name,
+                        product_price=cart_item.product.price,
                         quantity=cart_item.quantity,
                     )
 
@@ -439,3 +443,74 @@ def get_stripe_public_key(request):
     return Response({
         "publicKey": settings.STRIPE_PUBLIC_KEY
     })
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def stripe_webhook(request):
+    """
+    Stripe webhook endpoint
+    POST /api/stripe/webhook/
+    """
+    payload = request.body
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
+
+    if not webhook_secret:
+        return Response({"status": "webhook secret not configured."})
+
+    try:
+        # Verify webhook signature
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, webhook_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return Response({"error": "Invalid payload"}, status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return Response({"error": "Invalid signature"}, status=400)
+
+    # Handle the event
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+        
+        # Get the order
+        order_id = session.get("client_reference_id")
+
+        try:
+            order = Order.objects.get(id=order_id)
+
+            # Update order status
+            order.payment_status = "completed"
+            order.status = "processing"
+            order.save()
+
+            print(f"✅ Payment successful for order {order.order_number}")
+            
+        except Order.DoesNotExist:
+            print(f"❌ Order {order_id} not found")
+
+    elif event("type") == "checkout.session.expired":
+        session = event["data"]["object"]
+        order_id = session.get("client_reference_id")
+
+        try:
+            order = Order.objects.get(id=order_id)
+            order.payment_status = "failed"
+            order.status = "cancelled"
+            order.save()
+
+            # Restore product stock
+            for item in order.items.all():
+                product = item.product
+                if product:
+                    product.stock += item.quantity
+                    product.save()
+            
+            print(f"Checkout expired for order {order.order_number}")
+
+        except Order.DoesNotExist:
+            print(f"❌ Order {order_id} not found")
+
+    return Response({"status": "success"})
