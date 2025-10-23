@@ -486,12 +486,16 @@ def stripe_webhook(request):
             order.status = "processing"
             order.save()
 
+            # Send order comfirmation email
+            from .email_service import EmailService
+            EmailService.send_order_confirmation(order)
+
             print(f"✅ Payment successful for order {order.order_number}")
             
         except Order.DoesNotExist:
             print(f"❌ Order {order_id} not found")
 
-    elif event("type") == "checkout.session.expired":
+    elif event["type"] == "checkout.session.expired":
         session = event["data"]["object"]
         order_id = session.get("client_reference_id")
 
