@@ -103,7 +103,11 @@ class OrderAdmin(admin.ModelAdmin):
         "carrier",
         "created_at"
     ]
-    list_editable = ['status', 'tracking_number', 'carrier']
+    list_editable = [
+        "status", 
+        "tracking_number", 
+        "carrier"
+    ]
     list_filter = [
         "status",
         "payment_status",
