@@ -99,11 +99,15 @@ class OrderAdmin(admin.ModelAdmin):
         "total",
         "status",
         "payment_status",
+        "tracking_number",
+        "carrier",
         "created_at"
     ]
+    list_editable = ['status', 'tracking_number', 'carrier']
     list_filter = [
         "status",
         "payment_status",
+        "carrier",
         "created_at"
     ]
     search_fields = [
@@ -111,7 +115,8 @@ class OrderAdmin(admin.ModelAdmin):
         "email",
         "user__username",
         "first_name",
-        "last_name"
+        "last_name",
+        "tracking_number"
     ]
     readonly_fields = [
         "order_number",
@@ -150,6 +155,14 @@ class OrderAdmin(admin.ModelAdmin):
                 "country"
             )
         }),
+        ('Shipping Tracking', {
+            'fields': (
+                'tracking_number',
+                'carrier',
+                'shipped_at',
+                'delivered_at'
+            )
+        }),
         ("Payment Details", {
             "fields": (
                 "subtotal",
@@ -177,12 +190,38 @@ class OrderAdmin(admin.ModelAdmin):
     
     def mark_as_shipped(self, request, queryset):
         """Bulk action: Mark orders as shipped"""
-        updated = queryset.update(status='shipped')
-        self.message_user(request, f"{updated} order(s) marked as shipped.")
-    mark_as_shipped.short_description = "Mark selected orders as Shipped"
+        from django.utils import timezone
+        from store.email_service import EmailService
+        
+        updated = 0
+        for order in queryset:
+            order.status = 'shipped'
+            if not order.shipped_at:
+                order.shipped_at = timezone.now()
+            order.save()
+            
+            # Send shipping notification email
+            EmailService.send_shipping_notification(order)
+            updated += 1
+            
+        self.message_user(request, f'{updated} order(s) marked as shipped and emails sent.')
+    mark_as_shipped.short_description = 'Mark selected orders as Shipped (sends email)'
     
     def mark_as_delivered(self, request, queryset):
         """Bulk action: Mark orders as delivered"""
-        updated = queryset.update(status="delivered")
-        self.message_user(request, f"{updated} order(s) marked as delivered.")
-    mark_as_delivered.short_description = "Mark selected orders as Delivered"
+        from django.utils import timezone
+        from store.email_service import EmailService
+        
+        updated = 0
+        for order in queryset:
+            order.status = 'delivered'
+            if not order.delivered_at:
+                order.delivered_at = timezone.now()
+            order.save()
+            
+            # Send delivery notification email
+            EmailService.send_order_delivered_notification(order)
+            updated += 1
+            
+        self.message_user(request, f'{updated} order(s) marked as delivered and emails sent.')
+    mark_as_delivered.short_description = 'Mark selected orders as Delivered (sends email)'

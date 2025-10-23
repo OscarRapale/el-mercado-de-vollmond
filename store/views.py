@@ -323,7 +323,39 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         Return orders for current user only
         """
         return Order.objects.filter(user=self.request.user)
-    
+
+    @action(detail=True, methods=['get'])
+    def tracking(self, request, pk=None):
+        """
+        GET /api/orders/{id}/tracking/
+        Get tracking information for an order
+        """
+        order = self.get_object()
+        
+        if not order.tracking_number:
+            return Response({
+                'status': 'pending',
+                'message': 'Tracking information not available yet.'
+            })
+        
+        # Generate tracking URL based on carrier
+        tracking_urls = {
+            'USPS': f'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1={order.tracking_number}',
+            'FedEx': f'https://www.fedex.com/fedextrack/?trknbr={order.tracking_number}',
+            'UPS': f'https://www.ups.com/track?tracknum={order.tracking_number}',
+            'DHL': f'https://www.dhl.com/en/express/tracking.html?AWB={order.tracking_number}',
+        }
+        
+        return Response({
+            'order_number': order.order_number,
+            'status': order.status,
+            'tracking_number': order.tracking_number,
+            'carrier': order.carrier,
+            'tracking_url': tracking_urls.get(order.carrier, ''),
+            'shipped_at': order.shipped_at,
+            'delivered_at': order.delivered_at,
+        })
+ 
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint for user registration

@@ -167,6 +167,22 @@ class Order(models.Model):
     stripe_payment_intent_id = models.CharField(max_length=255, blank=True)
     idempotency_key = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
 
+    # Shipping tracking
+    tracking_number = models.CharField(max_length=100, blank=True)
+    carrier = models.CharField(
+        max_length=50,
+        blank=True,
+        choices=[
+           ("USPS", "USPS"),
+            ("FedEx", "FedEx"),
+            ("UPS", "UPS"),
+            ("DHL", "DHL"),
+            ("Other", "Other"), 
+        ]
+    )
+    shipped_at = models.DateTimeField(null=True, blank=True)
+    delivered_at = models.DateTimeField(null=True, blank=True)
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

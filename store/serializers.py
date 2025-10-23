@@ -156,6 +156,10 @@ class OrderSerializer(serializers.ModelSerializer):
             'status',
             'payment_status',
             'stripe_payment_intent_id',
+            'tracking_number',
+            'carrier',
+            'shipped_at',
+            'delivered_at',
             'items',
             'created_at',
             'updated_at'
