@@ -271,6 +271,11 @@ class CartViewSet(viewsets.ModelViewSet):
                     # Reduce product stock
                     product = cart_item.product
                     product.stock -= cart_item.quantity
+
+                    # Auto-disable if out of stock
+                    if product.stock == 0:
+                        product.is_available = False
+
                     product.save()
 
                 # Create Stripe checkout session

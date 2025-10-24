@@ -20,12 +20,14 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
         "price",
         "stock",
+        "low_stock_threshold",
+        "stock_status",
         "is_available",
         "in_stock",
         "created_at"
     ]
     list_filter = ["category", "is_available", "created_at"]
-    list_editable = ["price", "stock", "is_available"]
+    list_editable = ["price", "stock", "low_stock_threshold", "is_available"]
     search_fields = ["name", "description"]
     prepopulated_fields = {"slug": ("name",)}
 
@@ -42,6 +44,45 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ["created_at", "updated_at"]
+
+    def stock_status(self, obj):
+        """Display stock status with color coding"""
+        if obj.is_out_of_stock:
+            return "🔴 Out of Stock"
+        elif obj.is_low_stock:
+            return "⚠️ Low Stock"
+        else:
+            return "✅ In Stock"
+    
+    stock_status.short_description = "Stock Status"
+
+    actions = ["check_low_stock"]
+
+    def check_low_stock(self, request, queryset):
+        """Admin action: Check selected products for low stock"""
+        from django.db.models import Q, F
+
+        low_stock = queryset.filter(
+            Q(stock__lte=F("low_stock_threshold")),
+            Q(stock__gt=0)
+        )
+
+        out_of_stock = queryset.filter(stock=0)
+
+        message_parts = []
+        
+        if low_stock.exists():
+            message_parts.append(f"{low_stock.count()} product(s) are low on stock")
+        
+        if out_of_stock.exists():
+            message_parts.append(f"{out_of_stock.count()} product(s) are out of stock")
+        
+        if not low_stock.exists() and not out_of_stock.exists():
+            message_parts.append("All selected products have healthy stock levels")
+        
+        self.message_user(request, ' | '.join(message_parts))
+    
+    check_low_stock.short_description = "Check stock levels"
 
 class CartItemInline(admin.TabularInline):
     """Show cart items inside the Cart admin page"""

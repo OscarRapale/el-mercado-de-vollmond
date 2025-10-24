@@ -29,6 +29,7 @@ class Product(models.Model):
     # Inventory
     stock = models.PositiveIntegerField(default=0)
     is_available = models.BooleanField(default=True)
+    low_stock_threshold = models.PositiveIntegerField(default=5)
     # Images
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     # Metadata
@@ -45,6 +46,16 @@ class Product(models.Model):
     def in_stock(self):
         """Check if product is in stock"""
         return self.stock > 0 and self.is_available
+    
+    @property
+    def is_low_stock(self):
+        """Check if product is below threshold"""
+        return 0 < self.stock <= self.low_stock_threshold and self.is_available
+    
+    @property
+    def is_out_of_stock(self):
+        """Check if product is out of stock"""
+        return self.stock == 0
 
 class Cart(models.Model):
     user = models.OneToOneField(

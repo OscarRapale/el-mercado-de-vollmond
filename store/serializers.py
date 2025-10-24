@@ -17,6 +17,8 @@ class ProductSerializer(serializers.ModelSerializer):
     """
     category_name = serializers.CharField(source="category.name", read_only=True)
     in_stock = serializers.BooleanField(read_only=True)
+    is_low_stock = serializers.BooleanField(read_only=True)
+    is_out_of_stock = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Product
@@ -29,8 +31,11 @@ class ProductSerializer(serializers.ModelSerializer):
             "description",
             "price",
             "stock",
+            "low_stock_threshold",
             "is_available",
             "in_stock",
+            "is_low_stock",
+            "is_out_of_stock",
             "image",
             "created_at",
             "updated_at"
