@@ -16,7 +16,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
@@ -228,14 +228,53 @@ class CartViewSet(viewsets.ModelViewSet):
                     {"error": f"{field} is required"}
                 )
             
+        # Get coupon code if provided - NEW!
+        coupon_code = request.data.get('coupon_code', '').strip()
+        coupon = None
+        discount_amount = Decimal('0.00')
+        
+        if coupon_code:
+            try:
+                coupon = Coupon.objects.get(code__iexact=coupon_code)
+                
+                # Validate coupon
+                subtotal = cart.subtotal
+                
+                if not coupon.is_valid():
+                    return Response(
+                        {'error': 'Invalid or expired coupon code'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                if not coupon.can_be_used_for_order(subtotal):
+                    return Response(
+                        {'error': f'Minimum purchase of ${coupon.minimum_purchase} required'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                
+                # Calculate discount
+                discount_amount = coupon.calculate_discount(subtotal)
+                
+            except Coupon.DoesNotExist:
+                return Response(
+                    {'error': 'Invalid coupon code'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
         try:
             # Use transaction to ensure data consistency
             with transaction.atomic():
                 # Calculate totals
                 subtotal = cart.subtotal
                 shipping_cost = Decimal("5.00")
+
+                # Apply discount before calculation tax
+                discounted_subtotal = subtotal - discount_amount
+
+                # Calculate tax on discounted amount
                 tax = subtotal * Decimal("0.08")
-                total = subtotal + shipping_cost + tax
+                #Final total
+                total = discounted_subtotal + shipping_cost + tax
 
                 # Create order
                 order = Order.objects.create(
@@ -251,12 +290,19 @@ class CartViewSet(viewsets.ModelViewSet):
                     country=shipping_data['country'],
                     phone=shipping_data['phone'],
                     subtotal=subtotal,
+                    coupon=coupon,
+                    discount_amount=discount_amount,
                     shipping_cost=shipping_cost,
                     tax=tax,
                     total=total,
                     status='pending',
                     payment_status='pending',
                 )
+
+                # Increment coupon usage
+                if coupon:
+                    coupon.times_used += 1
+                    coupon.save()
 
                 # Create order items from cart items
                 for cart_item in cart.items.all():
@@ -306,6 +352,8 @@ class CartViewSet(viewsets.ModelViewSet):
                     'order_number': order.order_number,
                     'checkout_url': checkout_session.url,
                     'session_id': checkout_session.id,
+                    'discount_applied': discount_amount > 0,
+                    'discount_amount': str(discount_amount),
                 }, status=status.HTTP_201_CREATED)
             
         except Exception as e:
@@ -313,6 +361,77 @@ class CartViewSet(viewsets.ModelViewSet):
                 {'error': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+    @action(detail=False, methods=['post'])
+    def apply_coupon(self, request):
+        """
+        POST /api/cart/apply_coupon/
+        Apply a coupon code to calculate discount
+        Body: {"code": "SAVE10"}
+        """
+        cart = self.get_object()
+        coupon_code = request.data.get('code', '').strip().upper()
+        
+        if not coupon_code:
+            return Response(
+                {'error': 'Coupon code is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            coupon = Coupon.objects.get(code__iexact=coupon_code)
+        except Coupon.DoesNotExist:
+            return Response(
+                {'error': 'Invalid coupon code'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Check if coupon is valid
+        if not coupon.is_valid():
+            if not coupon.is_active:
+                return Response(
+                    {'error': 'This coupon is no longer active'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            elif coupon.times_used >= coupon.max_uses:
+                return Response(
+                    {'error': 'This coupon has reached its usage limit'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            else:
+                return Response(
+                    {'error': 'This coupon has expired'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        # Check minimum purchase requirement
+        subtotal = cart.subtotal
+        if subtotal < coupon.minimum_purchase:
+            return Response(
+                {
+                    'error': f'Minimum purchase of ${coupon.minimum_purchase} required. Your cart is ${subtotal}.'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Calculate discount
+        discount_amount = coupon.calculate_discount(subtotal)
+        shipping_cost = Decimal('5.00')
+        tax = (subtotal - discount_amount + shipping_cost) * Decimal('0.08')
+        total = subtotal - discount_amount + shipping_cost + tax
+        
+        return Response({
+            'valid': True,
+            'coupon_code': coupon.code,
+            'discount_type': coupon.discount_type,
+            'discount_display': coupon.get_discount_display(),
+            'subtotal': subtotal,
+            'discount_amount': discount_amount,
+            'shipping_cost': shipping_cost,
+            'tax': tax,
+            'total': total,
+            'message': f'Coupon "{coupon.code}" applied! You save ${discount_amount}'
+        })
 
         
 class OrderViewSet(viewsets.ReadOnlyModelViewSet):

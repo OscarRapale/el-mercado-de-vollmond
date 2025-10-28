@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
 
 admin.site.site_header = "Adminstración El Mercado de Vollmond"
 admin.site.site_title = "El Mercado de Vollmond Admin"
@@ -137,6 +137,8 @@ class OrderAdmin(admin.ModelAdmin):
         "order_number",
         "user",
         "email",
+        "subtotal",
+        "discount_amount",
         "total",
         "status",
         "payment_status",
@@ -211,6 +213,8 @@ class OrderAdmin(admin.ModelAdmin):
         ("Payment Details", {
             "fields": (
                 "subtotal",
+                "coupon",
+                "discount_amount",
                 "shipping_cost",
                 "tax",
                 "total",
@@ -270,3 +274,73 @@ class OrderAdmin(admin.ModelAdmin):
             
         self.message_user(request, f'{updated} order(s) marked as delivered and emails sent.')
     mark_as_delivered.short_description = 'Mark selected orders as Delivered (sends email)'
+
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    """
+    Admin interface for Coupon model
+    """
+    list_display = [
+        "code",
+        "discount_type",
+        "discount_value",
+        "times_used",
+        "max_uses",
+        "minimum_purchase",
+        "valid_from",
+        "valid_until",
+        "is_active",
+        "status_display"
+    ]
+
+    list_filter = ["discount_type", "is_active", "valid_from", "valid_until"]
+
+    search_fields = ["code", "description"]
+
+    list_editable = ["is_active"]
+
+    fieldsets = (
+        ("Coupon Information", {
+            "fields": ("code", "description", "is_active")
+        }),
+        ("Discount Details", {
+            "fields": ("discount_type", "discount_value", "minimum_purchase")
+        }),
+        ("Usage & Validit", {
+            "fields": (
+                ("valid_from", "valid_until"),
+                ("max_uses", "times_used")
+            )
+        }),
+    )
+
+    readonly_fields = ["times_used", "created_at", "updated_at"]
+
+    def status_display(self, obj):
+        """Display coupon status"""
+        if not obj.is_active:
+            return "⚫ Inactive"
+        elif not obj.is_valid():
+            if obj.times_used >= obj.max_uses:
+                return "🔴 Fully Used"
+            else:
+                return "⏰ Expired"
+        else:
+            remaining = obj.max_uses - obj.times_used
+            return f"✅ Active ({remaining} uses left)"
+        
+    status_display.short_description = "Status"
+
+    actions = ["deactivate_coupons", "activate_coupons"]
+
+    def deactivate_coupons(self, request, queryset):
+        """Bulk action: Deactivate coupons"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f"{updated} coupon(s) deactivated.")
+    deactivate_coupons.short_description = "Deactivate selected coupons"
+    
+    def activate_coupons(self, request, queryset):
+        """Bulk action: Activate coupons"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f"{updated} coupon(s) activated.")
+    activate_coupons.short_description = "Activate selected coupons"

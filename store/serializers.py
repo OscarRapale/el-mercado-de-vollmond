@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
 from django.contrib.auth.models import User
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -155,6 +155,9 @@ class OrderSerializer(serializers.ModelSerializer):
             'country',
             'phone',
             'subtotal',
+            'coupon',
+            'coupon_code',
+            'discount_amount',
             'shipping_cost',
             'tax',
             'total',
@@ -202,3 +205,29 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', '')
         )
         return user
+
+class CouponSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Coupon model
+    """
+    discount_display = serializers.CharField(source='get_discount_display', read_only=True)
+    is_currently_valid = serializers.BooleanField(source='is_valid', read_only=True)
+    
+    class Meta:
+        model = Coupon
+        fields = [
+            'id',
+            'code',
+            'description',
+            'discount_type',
+            'discount_value',
+            'discount_display',
+            'minimum_purchase',
+            'valid_from',
+            'valid_until',
+            'max_uses',
+            'times_used',
+            'is_active',
+            'is_currently_valid'
+        ]
+        read_only_fields = ['times_used']

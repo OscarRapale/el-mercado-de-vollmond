@@ -160,6 +160,22 @@ class Order(models.Model):
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     tax = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    # Coupon/Discount
+    coupon = models.ForeignKey(
+        "Coupon",  # String reference since Coupon might be defined after Order
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="orders"
+    )
+    discount_amount = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        default=0,
+        help_text="Amount discounted by coupon"
+    )
+
     total = models.DecimalField(max_digits=10, decimal_places=2)
 
     # Status tracking
@@ -239,3 +255,72 @@ class OrderItem(models.Model):
     def total_price(self):
         """Calculate total price for this order item"""
         return self.quantity * self.product_price
+
+class Coupon(models.Model):
+    """Disscount coupons for orders"""
+    DISCOUNT_TYPES = [
+        ("percentage", "Percentage"),
+        ("fixed", 'Fixed Amount'),
+    ]
+
+    # Coupon identification
+    code = models.CharField(max_length=50, unique=True, db_index=True)
+    description = models.TextField(blank=True)
+    # Discount configuration
+    discount_type = models.CharField(max_length=20, choices=DISCOUNT_TYPES)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2)
+    # Usage restrictions
+    valid_from =  models.DateField()
+    valid_until = models.DateField()
+    max_uses = models.PositiveIntegerField(default=1)
+    times_used = models.PositiveIntegerField(default=0)
+    minimum_purchase = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        help_text="Minimum order subtotal required to use this coupon"
+    )
+    # Status
+    is_active = models.BooleanField(default=True)
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.code} - {self.get_discount_display()}"
+    
+    def get_discount_display(self):
+        """Display discount in human-readable format"""
+        if self.discount_type == "percentage":
+            return f"{self.discount_value}% off"
+        else:
+            return f"${self.discount_value} off"
+        
+    def is_valid(self):
+        """Check if coupon is currently valid"""
+        from django.utils import timezone
+        now = timezone.now().date()
+        return (
+            self.is_active and
+            self.valid_from <= now <= self.valid_until and
+            self.times_used < self.max_uses
+        )
+    
+    def can_be_used_for_order(self, order_subtotal):
+        """Check if coupon can be used for a given order subtotal"""
+        return self.is_valid() and order_subtotal >= self.minimum_purchase
+    
+    def calculate_discount(self, subtotal):
+        """Calculate discount amount for a given subtotal"""
+        from decimal import Decimal
+        
+        if self.discount_type == "percentage":
+            discount = subtotal * (self.discount_value / Decimal("100"))
+        else:
+            discount = self.discount_value
+        
+        # Discount can't be more than subtotal
+        return min(discount, subtotal)
