@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon, ProductReview
 
 admin.site.site_header = "Adminstración El Mercado de Vollmond"
 admin.site.site_title = "El Mercado de Vollmond Admin"
@@ -22,6 +22,8 @@ class ProductAdmin(admin.ModelAdmin):
         "stock",
         "low_stock_threshold",
         "stock_status",
+        "avarage_rating_display",
+        "review_count",
         "is_available",
         "in_stock",
         "created_at"
@@ -83,6 +85,21 @@ class ProductAdmin(admin.ModelAdmin):
         self.message_user(request, ' | '.join(message_parts))
     
     check_low_stock.short_description = "Check stock levels"
+
+    def avarage_rating_display(self, obj):
+        """Display average rating"""
+        avg = obj.avarage_rating
+        if avg:
+            stars = '⭐' * int(avg)
+            return f"{stars} {avg}"
+        return "No reviews"
+    avarage_rating_display.short_description = 'Avg Rating'
+    
+    def review_count(self, obj):
+        """Display number of reviews"""
+        count = obj.review_count
+        return f"{count} review{'s' if count != 1 else ''}"
+    review_count.short_description = 'Reviews'
 
 class CartItemInline(admin.TabularInline):
     """Show cart items inside the Cart admin page"""
@@ -344,3 +361,67 @@ class CouponAdmin(admin.ModelAdmin):
         updated = queryset.update(is_active=True)
         self.message_user(request, f"{updated} coupon(s) activated.")
     activate_coupons.short_description = "Activate selected coupons"
+
+@admin.register(ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    """
+    Admin interface for ProductReview model
+    """
+    list_display = [
+        'product',
+        'user',
+        'rating_display',
+        'title',
+        'is_approved',
+        'is_verified_purchase',
+        'created_at'
+    ]
+    
+    list_filter = [
+        'rating',
+        'is_approved',
+        'created_at'
+    ]
+    
+    search_fields = [
+        'product__name',
+        'user__username',
+        'title',
+        'comment'
+    ]
+    
+    list_editable = ['is_approved']
+    
+    readonly_fields = ['user', 'product', 'order', 'created_at', 'updated_at']
+    
+    fieldsets = (
+        ('Review Information', {
+            'fields': ('product', 'user', 'order', 'is_approved')
+        }),
+        ('Review Content', {
+            'fields': ('rating', 'title', 'comment')
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+    
+    actions = ['approve_reviews', 'reject_reviews']
+    
+    def rating_display(self, obj):
+        """Display rating with stars"""
+        stars = '⭐' * obj.rating
+        return f"{stars} ({obj.rating})"
+    rating_display.short_description = 'Rating'
+    
+    def approve_reviews(self, request, queryset):
+        """Bulk action: Approve reviews"""
+        updated = queryset.update(is_approved=True)
+        self.message_user(request, f'{updated} review(s) approved.')
+    approve_reviews.short_description = 'Approve selected reviews'
+    
+    def reject_reviews(self, request, queryset):
+        """Bulk action: Reject reviews"""
+        updated = queryset.update(is_approved=False)
+        self.message_user(request, f'{updated} review(s) rejected.')
+    reject_reviews.short_description = 'Reject selected reviews'

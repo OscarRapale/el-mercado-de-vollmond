@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon, ProductReview
 from django.contrib.auth.models import User
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -19,6 +19,8 @@ class ProductSerializer(serializers.ModelSerializer):
     in_stock = serializers.BooleanField(read_only=True)
     is_low_stock = serializers.BooleanField(read_only=True)
     is_out_of_stock = serializers.BooleanField(read_only=True)
+    avarage_rating = serializers.FloatField(read_only=True)
+    review_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Product
@@ -36,6 +38,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "in_stock",
             "is_low_stock",
             "is_out_of_stock",
+            "avarage_rating",
+            "review_count",
             "image",
             "created_at",
             "updated_at"
@@ -231,3 +235,56 @@ class CouponSerializer(serializers.ModelSerializer):
             'is_currently_valid'
         ]
         read_only_fields = ['times_used']
+
+class ProductReviewSerializer(serializers.ModelSerializer):
+    """
+    Serializer for ProductReview model
+    """
+    user_name = serializers.CharField(source='user.username', read_only=True)
+    is_verified_purchase = serializers.BooleanField(read_only=True)
+    
+    class Meta:
+        model = ProductReview
+        fields = [
+            'id',
+            'product',
+            'user',
+            'user_name',
+            'rating',
+            'title',
+            'comment',
+            'is_approved',
+            'is_verified_purchase',
+            'created_at',
+            'updated_at'
+        ]
+        read_only_fields = ['user', 'is_approved', 'created_at', 'updated_at']
+    
+    def validate_rating(self, value):
+        """Validate rating is between 1 and 5"""
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Rating must be between 1 and 5")
+        return value
+    
+    def validate(self, data):
+        """Check if user already reviewed this product"""
+        request = self.context.get('request')
+        product = data.get('product')
+        
+        # Check if updating existing review
+        if self.instance:
+            return data
+        
+        # Check if user already has a review for this product
+        if request and product:
+            existing_review = ProductReview.objects.filter(
+                user=request.user,
+                product=product
+            ).exists()
+            
+            if existing_review:
+                raise serializers.ValidationError(
+                    "You have already reviewed this product"
+                )
+        
+        return data

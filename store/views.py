@@ -16,14 +16,15 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
-from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon, ProductReview
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
     CartSerializer,
     CartItemSerializer,
     OrderSerializer,
-    UserSerializer
+    UserSerializer,
+    ProductReviewSerializer
 )
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -56,6 +57,25 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(category__slug=category_slug)
 
         return queryset
+    
+    @action(detail=True, methods=["get"])
+    def reviews(self, request, slug=None):
+        """
+        GET /api/products/{slug}/reviews/
+        Get all approved reviews for a product
+        """
+        product = self.get_object()
+        reviews = product.reviews.filter(is_approved=True)
+        serializer = ProductReviewSerializer(reviews, many=True)
+        
+        return Response({
+            "product_id": product.id,
+            "product_name": product.name,
+            "average_rating": product.average_rating,
+            "total_reviews": product.review_count,
+            "rating_distribution": product.rating_distribution,
+            "reviews": serializer.data
+        })
 
 class CartViewSet(viewsets.ModelViewSet):
     """
@@ -479,6 +499,80 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
             'shipped_at': order.shipped_at,
             'delivered_at': order.delivered_at,
         })
+
+class ProductReviewViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for product reviews
+    """
+    serializer_class = ProductReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        """
+        Return reviews for a specific product
+        Only show approved reviews to non-staff users
+        """
+        queryset = ProductReview.objects.all()
+
+        # Filter by product if specified
+        product_id = self.request.query_params.get("product", None)
+        if product_id:
+            queryset = queryset.filter(product_id=product_id)
+
+        # Non-staff users only see approved reviews
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(is_approved=True)
+
+        return queryset
+    
+    def perform_create(self, serializer):
+        """
+        Create review with current user
+        Check if user purchased the product
+        """
+        product = serializer.validated_data["product"]
+        user = self.request.user
+
+        # Check if user has purchased this product
+        purchased_order = Order.objects.filter(
+            user=user,
+            items__product=product,
+            payment_status="completed"
+        ).first()
+
+        # Save review with user and order (if found)
+        serializer.save(
+            user=user,
+            order=purchased_order
+        )
+
+    @action(detail=False, methods=["get"])
+    def my_reviews(self, request):
+        """
+        GET /api/reviews/my_reviews/
+        Get all reviews by current user
+        """
+        reviews = ProductReview.objects.filter(user=request.user)
+        serializer= self.get_serializer(reviews, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=["get"])
+    def rating_distribution(self, request, pk=None):
+        """
+        GET /api/reviews/{id}/rating_distribution/
+        Get rating distribution for a product
+        """
+        review = self.get_object()
+        product = review.product
+        distribution = product.rating_distribution
+
+        return Response({
+            "product_id": product.id,
+            "product_name": product.name,
+            "avarage_rating": product.avarage_rating,
+            "total_reviews": product.review_count,
+            "distribution": distribution
+        })
  
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -492,7 +586,7 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Allow anyone to create (register), but only authenticated to update
         """
-        if self.action == 'create':
+        if self.action == "create":
             return [AllowAny()]
         return [IsAuthenticated()]
 

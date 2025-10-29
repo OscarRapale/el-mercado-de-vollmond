@@ -56,6 +56,32 @@ class Product(models.Model):
     def is_out_of_stock(self):
         """Check if product is out of stock"""
         return self.stock == 0
+    
+    @property
+    def avarage_rating(self):
+        """Calculate avarage rating from approved reviews"""
+        from django.db.models import Avg
+        approved_reviews = self.reviews.filter(is_approved=True)
+        if approved_reviews.exists():
+            avg = approved_reviews.aggregate(Avg("rating"))["rating__avg"]
+            return round(avg, 1) if avg else None
+        return None
+    
+    @property
+    def review_count(self):
+        """Count of approved reviews"""
+        return self.reviews.filter(is_approved=True).count()
+    
+    @property
+    def rating_distribution(self):
+        """Get distribution of ratings (how many 5-star, 4-star, etc.)"""
+        distribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        approved_reviews = self.reviews.filter(is_approved=True)
+        
+        for review in approved_reviews:
+            distribution[review.rating] += 1
+        
+        return distribution
 
 class Cart(models.Model):
     user = models.OneToOneField(
@@ -324,3 +350,54 @@ class Coupon(models.Model):
         
         # Discount can't be more than subtotal
         return min(discount, subtotal)
+
+class ProductReview(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="reviews"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="reviews"
+    )
+    # Review content
+    rating = models.PositiveIntegerField(
+        choices=[(1, '1 Star'), (2, '2 Stars'), (3, '3 Stars'), (4, '4 Stars'), (5, '5 Stars')],
+        help_text="Rating from 1 to 5 stars"
+    )
+    title = models.CharField(max_length=200)
+    comment = models.TextField()
+    # Moderation
+    is_approved = models.BooleanField(
+        default=False,
+        help_text="Reviews must be approved before appearing publicly"
+    )
+    # Verified purchase tracking
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviews",
+        help_text="Order associated with this review (verified purchase)"
+    )
+    # Metadata
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('product', 'user')  # One review per user per product
+        indexes = [
+            models.Index(fields=['product', 'is_approved']),
+        ]
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.product.name} ({self.rating}★)"
+    
+    @property
+    def is_verified_purchase(self):
+        """Check if this review is from a verified purchase"""
+        return self.order is not None
