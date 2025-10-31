@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from .analytics import AnalyticsService
+from rest_framework.permissions import IsAdminUser
 import json
 from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon, ProductReview
 from .serializers import (
@@ -768,3 +770,48 @@ def stripe_webhook(request):
             print(f"❌ Order {order_id} not found")
 
     return Response({"status": "success"})
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def analytics_dashboard(request):
+    """
+    GET /api/analytics/dashboard/
+    Get complete dashboard analytics (Admin only)
+    """
+    data = AnalyticsService.get_complete_dashboard()
+    return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def analytics_sales_overview(request):
+    """
+    GET /api/analytics/sales/
+    Get sales overview (Admin only)
+    """
+    data = AnalyticsService.get_sales_overview()
+    return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def analytics_top_products(request):
+    """
+    GET /api/analytics/top-products/
+    Get top-selling products (Admin only)
+    """
+    limit = int(request.query_params.get('limit', 5))
+    data = AnalyticsService.get_top_products(limit)
+    return Response(data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def analytics_daily_sales(request):
+    """
+    GET /api/analytics/daily-sales/
+    Get daily sales chart data (Admin only)
+    """
+    days = int(request.query_params.get('days', 30))
+    data = AnalyticsService.get_daily_sales(days)
+    return Response(data)

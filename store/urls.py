@@ -7,7 +7,11 @@ from .views import (
     CartViewSet,
     OrderViewSet,
     UserViewSet,
-    ProductReviewViewSet
+    ProductReviewViewSet,
+    analytics_dashboard,
+    analytics_sales_overview,
+    analytics_top_products,
+    analytics_daily_sales,
 )
 
 router = DefaultRouter()
@@ -24,4 +28,10 @@ urlpatterns = [
     path("csrf/", get_csrf_token, name="csrf"),
     path("stripe/config/", get_stripe_public_key, name="stripe-config"),
     path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
+
+    # Analytics endpoints
+    path('analytics/dashboard/', analytics_dashboard, name='analytics-dashboard'),
+    path('analytics/sales/', analytics_sales_overview, name='analytics-sales'),
+    path('analytics/top-products/', analytics_top_products, name='analytics-top-products'),
+    path('analytics/daily-sales/', analytics_daily_sales, name='analytics-daily-sales'),
 ]
