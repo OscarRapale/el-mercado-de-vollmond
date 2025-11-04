@@ -1,0 +1,101 @@
+// ============================================
+// BUTTONS
+// ============================================
+
+.btn {
+  @include button-base;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($gold, 0.3);
+  }
+}
+
+// Primary button (burgundy)
+.btn-primary {
+  background: $burgundy;
+  color: $cream;
+  
+  &:hover:not(:disabled) {
+    background: $burgundy-light;
+    box-shadow: $shadow-md;
+  }
+  
+  &:active {
+    background: $burgundy-dark;
+  }
+}
+
+// Secondary button (dark teal with gold border)
+.btn-secondary {
+  background: transparent;
+  color: $gold;
+  border: 2px solid $gold;
+  
+  &:hover:not(:disabled) {
+    background: rgba($gold, 0.1);
+    box-shadow: $shadow-gold;
+  }
+}
+
+// Gold button
+.btn-gold {
+  @include gradient-gold;
+  color: $charcoal;
+  font-weight: $fw-bold;
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: $shadow-gold;
+  }
+}
+
+// Outline button
+.btn-outline {
+  background: transparent;
+  color: $burgundy;
+  border: 2px solid $burgundy;
+  
+  &:hover:not(:disabled) {
+    background: $burgundy;
+    color: $cream;
+  }
+}
+
+// Text button
+.btn-text {
+  background: transparent;
+  color: $burgundy;
+  padding: $spacing-sm $spacing-md;
+  
+  &:hover:not(:disabled) {
+    background: rgba($burgundy, 0.1);
+  }
+}
+
+// Button sizes
+.btn-sm {
+  padding: $spacing-sm $spacing-md;
+  font-size: $fs-sm;
+}
+
+.btn-lg {
+  padding: $spacing-lg $spacing-2xl;
+  font-size: $fs-lg;
+}
+
+// Icon buttons
+.btn-icon {
+  padding: $spacing-md;
+  border-radius: $radius-full;
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.1);
+  }
+}
+
+// Full width button
+.btn-block {
+  width: 100%;
+  text-align: center;
+}

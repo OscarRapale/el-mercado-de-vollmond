@@ -1,0 +1,106 @@
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+// Import Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&family=Cinzel:wght@400;600;700&display=swap');
+
+body {
+  font-family: $font-body;
+  font-size: $fs-base;
+  line-height: $lh-normal;
+  color: $text-primary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: $fw-bold;
+  line-height: $lh-tight;
+  margin-bottom: $spacing-md;
+  color: $text-primary;
+}
+
+h1 {
+  font-size: $fs-5xl;
+  
+  @include mobile {
+    font-size: $fs-4xl;
+  }
+}
+
+h2 {
+  font-size: $fs-4xl;
+  
+  @include mobile {
+    font-size: $fs-3xl;
+  }
+}
+
+h3 {
+  font-size: $fs-3xl;
+  
+  @include mobile {
+    font-size: $fs-2xl;
+  }
+}
+
+h4 {
+  font-size: $fs-2xl;
+}
+
+h5 {
+  font-size: $fs-xl;
+}
+
+h6 {
+  font-size: $fs-lg;
+}
+
+// Accent headings (gold)
+.heading-gold {
+  color: $gold;
+  @include gold-glow;
+}
+
+.heading-accent {
+  font-family: $font-accent;
+  color: $gold;
+}
+
+// Paragraph
+p {
+  margin-bottom: $spacing-md;
+  line-height: $lh-relaxed;
+}
+
+// Links
+a {
+  color: $burgundy;
+  text-decoration: none;
+  transition: color $transition-fast;
+  
+  &:hover {
+    color: $burgundy-light;
+  }
+}
+
+// Text utilities
+.text-light {
+  color: $text-light;
+}
+
+.text-gold {
+  color: $gold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

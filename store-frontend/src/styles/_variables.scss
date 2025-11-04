@@ -1,0 +1,134 @@
+// ============================================
+// DARK FANTASY ACADEMIA COLOR PALETTE
+// ============================================
+
+// Primary Colors
+$dark-teal: #0d4d4d;
+$fantasy-green: #1a3a3a;
+$forest-green: #2d5f4f;
+
+// Accent Colors
+$burgundy: #8b2635;
+$burgundy-dark: #6b1f2f;
+$burgundy-light: #a63446;
+
+// Gold Accents
+$gold: #d4af37;
+$gold-light: #f4c430;
+$gold-dark: #b8941f;
+
+// Neutrals
+$cream: #f5f5dc;
+$warm-brown: #8b7355;
+$charcoal: #2d2d2d;
+$light-gray: #e8e8e8;
+$dark-gray: #4a4a4a;
+
+// Functional Colors
+$success: #2e7d32;
+$error: #c62828;
+$warning: #f57c00;
+$info: #0288d1;
+
+// Background Colors
+$bg-primary: $fantasy-green;
+$bg-secondary: $cream;
+$bg-dark: $charcoal;
+
+// Text Colors
+$text-primary: $charcoal;
+$text-secondary: $dark-gray;
+$text-light: $cream;
+$text-gold: $gold;
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
+
+// Font Families
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Lato', sans-serif;
+$font-accent: 'Cinzel', serif;
+
+// Font Sizes
+$fs-xs: 0.75rem;
+$fs-sm: 0.875rem;
+$fs-base: 1rem;
+$fs-lg: 1.125rem;
+$fs-xl: 1.25rem;
+$fs-2xl: 1.5rem;
+$fs-3xl: 1.875rem;
+$fs-4xl: 2.25rem;
+$fs-5xl: 3rem;
+$fs-6xl: 3.75rem;
+
+// Font Weights
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+// Line Heights
+$lh-tight: 1.2;
+$lh-normal: 1.5;
+$lh-relaxed: 1.75;
+
+// ============================================
+// SPACING
+// ============================================
+
+$spacing-xs: 0.25rem;
+$spacing-sm: 0.5rem;
+$spacing-md: 1rem;
+$spacing-lg: 1.5rem;
+$spacing-xl: 2rem;
+$spacing-2xl: 3rem;
+$spacing-3xl: 4rem;
+$spacing-4xl: 6rem;
+
+// ============================================
+// LAYOUT
+// ============================================
+
+$container-max-width: 1200px;
+$container-padding: 2rem;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Z-index layers
+$z-dropdown: 1000;
+$z-modal: 2000;
+$z-tooltip: 3000;
+$z-navbar: 100;
+
+// ============================================
+// EFFECTS
+// ============================================
+
+// Shadows
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+$shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
+
+// Border Radius
+$radius-sm: 0.25rem;
+$radius-md: 0.5rem;
+$radius-lg: 1rem;
+$radius-full: 9999px;
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Borders
+$border-width: 1px;
+$border-color: $dark-gray;
+$border-gold: 2px solid $gold;
