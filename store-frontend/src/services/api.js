@@ -55,7 +55,7 @@ export const auth = {
     register: (data) => api.post('/auth/register', data),
     login: (data) => api.post('/auth/login', data),
     logout: () => api.post('/auth/logout/'),
-    getCurrenyUser: () => api.get('/auth/user/'),
+    getCurrentUser: () => api.get('/auth/user/'),
 };
 
 // Product endpoint
