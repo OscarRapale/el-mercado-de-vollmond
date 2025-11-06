@@ -1,28 +1,28 @@
 // ============================================
-// DARK FANTASY ACADEMIA COLOR PALETTE
+// LUXURY MODERN COLOR PALETTE
 // ============================================
 
-// Primary Colors
-$dark-teal: #0d4d4d;
-$fantasy-green: #1a3a3a;
-$forest-green: #2d5f4f;
+// Primary Colors - More refined
+$dark-teal: #1a3a3a;
+$deep-forest: #0f2626;
+$charcoal: #1a1a1a;
+$slate: #2d3748;
 
-// Accent Colors
+// Accent Colors - Sophisticated
 $burgundy: #8b2635;
 $burgundy-dark: #6b1f2f;
 $burgundy-light: #a63446;
 
-// Gold Accents
-$gold: #d4af37;
-$gold-light: #f4c430;
-$gold-dark: #b8941f;
+// Gold - Elegant (less saturated)
+$gold: #c9a96e;
+$gold-light: #d4af77;
+$gold-dark: #b89860;
 
-// Neutrals
-$cream: #f5f5dc;
-$warm-brown: #8b7355;
-$charcoal: #2d2d2d;
-$light-gray: #e8e8e8;
-$dark-gray: #4a4a4a;
+// Neutrals - Clean
+$cream: #faf9f7;
+$warm-gray: #e8e6e3;
+$light-gray: #f5f4f2;
+$medium-gray: #6b7280;
 
 // Functional Colors
 $success: #2e7d32;
@@ -31,23 +31,23 @@ $warning: #f57c00;
 $info: #0288d1;
 
 // Background Colors
-$bg-primary: $fantasy-green;
+$bg-primary: $charcoal;
 $bg-secondary: $cream;
-$bg-dark: $charcoal;
+$bg-dark: $deep-forest;
+$bg-light: $light-gray;
 
 // Text Colors
 $text-primary: $charcoal;
-$text-secondary: $dark-gray;
+$text-secondary: $medium-gray;
 $text-light: $cream;
 $text-gold: $gold;
 
 // ============================================
-// TYPOGRAPHY
+// TYPOGRAPHY - More refined
 // ============================================
 
-// Font Families
-$font-heading: 'Playfair Display', serif;
-$font-body: 'Lato', sans-serif;
+$font-heading: 'Cormorant Garamond', serif; // More elegant
+$font-body: 'Inter', sans-serif; // Modern, clean
 $font-accent: 'Cinzel', serif;
 
 // Font Sizes
@@ -91,7 +91,7 @@ $spacing-4xl: 6rem;
 // LAYOUT
 // ============================================
 
-$container-max-width: 1200px;
+$container-max-width: 1400px; // Wider for modern feel
 $container-padding: 2rem;
 
 // Breakpoints
@@ -99,6 +99,7 @@ $breakpoint-sm: 640px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 1024px;
 $breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
 
 // Z-index layers
 $z-dropdown: 1000;
@@ -107,28 +108,30 @@ $z-tooltip: 3000;
 $z-navbar: 100;
 
 // ============================================
-// EFFECTS
+// EFFECTS - More subtle
 // ============================================
 
-// Shadows
-$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
-$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
-$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
-$shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
+// Shadows - Softer
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+$shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+$shadow-gold: 0 4px 15px rgba(201, 169, 110, 0.2);
 
-// Border Radius
-$radius-sm: 0.25rem;
+// Border Radius - More modern
+$radius-sm: 0.375rem;
 $radius-md: 0.5rem;
-$radius-lg: 1rem;
+$radius-lg: 0.75rem;
+$radius-xl: 1rem;
 $radius-full: 9999px;
 
-// Transitions
-$transition-fast: 0.15s ease;
-$transition-base: 0.3s ease;
-$transition-slow: 0.5s ease;
+// Transitions - Smoother
+$transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
 // Borders
 $border-width: 1px;
-$border-color: $dark-gray;
-$border-gold: 2px solid $gold;
+$border-color: $warm-gray;
+$border-gold: 1px solid $gold;

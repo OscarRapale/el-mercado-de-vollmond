@@ -4,13 +4,13 @@
 
 // Responsive breakpoints
 @mixin mobile {
-  @media (max-width: calc(#{$breakpoint-sm} - 1px)) {
+  @media (max-width: ($breakpoint-sm - 1)) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (min-width: $breakpoint-sm) and (max-width: calc(#{$breakpoint-md} - 1px)) {
+  @media (min-width: $breakpoint-sm) and (max-width: ($breakpoint-md - 1)) {
     @content;
   }
 }
@@ -76,12 +76,6 @@
   }
 }
 
-// Gold text with glow effect
-@mixin gold-glow {
-  color: $gold;
-  text-shadow: 0 0 10px rgba($gold, 0.5);
-}
-
 // Card styling
 @mixin card {
   background: $cream;
@@ -107,14 +101,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba($fantasy-green, $opacity);
+    background: rgba($charcoal, $opacity);
     z-index: 1;
   }
 }
 
-// Gradient background
+// Gradient backgrounds - FIXED
 @mixin gradient-dark {
-  background: linear-gradient(135deg, $fantasy-green 0%, $dark-teal 100%);
+  background: linear-gradient(135deg, $charcoal 0%, $deep-forest 100%);
 }
 
 @mixin gradient-gold {

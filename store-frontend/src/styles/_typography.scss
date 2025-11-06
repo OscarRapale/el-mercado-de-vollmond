@@ -1,9 +1,9 @@
 // ============================================
-// TYPOGRAPHY
+// TYPOGRAPHY - Luxury Modern
 // ============================================
 
-// Import Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Lato:wght@300;400;700&family=Cinzel:wght@400;600;700&display=swap');
+// Import Google Fonts (updated)
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap');
 
 body {
   font-family: $font-body;
@@ -17,7 +17,7 @@ body {
 // Headings
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-heading;
-  font-weight: $fw-bold;
+  font-weight: $fw-semibold;
   line-height: $lh-tight;
   margin-bottom: $spacing-md;
   color: $text-primary;
@@ -59,10 +59,10 @@ h6 {
   font-size: $fs-lg;
 }
 
-// Accent headings (gold)
+// Accent headings (gold) - more subtle
 .heading-gold {
   color: $gold;
-  @include gold-glow;
+  font-weight: $fw-semibold;
 }
 
 .heading-accent {
@@ -83,7 +83,7 @@ a {
   transition: color $transition-fast;
   
   &:hover {
-    color: $burgundy-light;
+    color: $gold;
   }
 }
 
@@ -102,5 +102,5 @@ a {
 
 .text-uppercase {
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
