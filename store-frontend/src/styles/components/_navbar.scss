@@ -175,8 +175,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background: #b59866;
-  border-radius: 0 0 $radius-xl $radius-xl;
+  background: $semi-gold-dark;
   box-shadow: $shadow-2xl;
   width: 100vw;
   padding: 0;
@@ -196,7 +195,7 @@
   display: grid;
   grid-template-columns: 700px 1fr;
   max-width: 1600px;
-  min-height: 550px;
+  min-height: 600px;
   margin: 0 auto;
 
   @include mobile {
@@ -208,7 +207,7 @@
 // Categories List
 .categories-list {
   padding-right: $spacing-4xl;
-  padding-top: 10rem;
+  padding-top: 13rem;
   line-height: .3;
   
   @include mobile {
@@ -251,7 +250,7 @@
 
 // Preview Area
 .preview-area {
-  padding-top: 10rem;
+  padding-top: 13rem;
   padding-left: $spacing-3xl;
   display: flex;
   flex-direction: column;
@@ -354,9 +353,3 @@
     color: $burgundy;
   }
 }
-
-// ============================================
-// ANIMATIONS
-// ============================================
-
-
