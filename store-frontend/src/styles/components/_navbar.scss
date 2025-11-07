@@ -6,9 +6,7 @@
   left: 0;
   right: 0;
   z-index: $z-navbar;
-  background: rgba($charcoal, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba($gold, 0.1);
+  border-bottom: 1px solid $charcoal;
   transition: all $transition-base;
 
   &.navbar-scrolled {
@@ -55,7 +53,7 @@
 }
 
 .logo-main {
-  color: $cream;
+  color: $charcoal;
 }
 
 .logo-accent {
@@ -83,11 +81,10 @@
 }
 
 .navbar-link {
-  color: $cream;
+  color: $charcoal;
   font-size: $fs-sm;
-  font-weight: $fw-medium;
+  font-weight: $fw-bold;
   text-transform: uppercase;
-  letter-spacing: 2px;
   padding: $spacing-sm 0;
   transition: color $transition-fast;
   background: none;
@@ -127,7 +124,7 @@
 }
 
 .navbar-icon-btn {
-  color: $cream;
+  color: $charcoal;
   background: none;
   border: none;
   cursor: pointer;
@@ -166,7 +163,7 @@
 }
 
 // ============================================
-// MODERN MEGA MENU WITH IMAGE PREVIEW
+// MODERN MEGA MENU WITH IMAGE PREVIEW & SMOOTH ANIMATION
 // ============================================
 
 .navbar-dropdown {
@@ -175,35 +172,36 @@
 
 .mega-menu {
   position: fixed;
-  top: 80px;
+  top: 0; /* Position directly below the navbar */
   left: 0;
   right: 0;
-  margin-top: 0;
-  background: $cream;
+  background: #b59866;
   border-radius: 0 0 $radius-xl $radius-xl;
   box-shadow: $shadow-2xl;
   width: 100vw;
   padding: 0;
-  z-index: 1;
   overflow: hidden;
-  animation: slideDown $transition-base ease-out;
-  transform-origin: top;
-
+  z-index: -1;
+  
+  /* Smooth slide-down animation */
+  opacity: 0;
+  transform: translateY(-100px);
+  animation: slideDownSmooth 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  pointer-events: all;
 
   @include mobile {
     width: 90vw;
     max-width: 400px;
     left: auto;
     right: 0;
-    transform: none;
   }
 }
 
 .mega-menu-grid {
   display: grid;
-  grid-template-columns: 400px 1fr;
-  max-width: 1400px;
-  min-height: 500px;
+  grid-template-columns: 700px 1fr;
+  max-width: 1600px;
+  min-height: 550px;
   margin: 0 auto;
 
   @include mobile {
@@ -214,23 +212,14 @@
 
 // Categories List
 .categories-list {
-  padding: $spacing-xl;
-  border-right: 1px solid $warm-gray;
-  background: $light-gray;
-
+  padding-right: $spacing-4xl;
+  padding-top: 10rem;
+  line-height: .3;
+  
   @include mobile {
     border-right: none;
     border-bottom: 1px solid $warm-gray;
   }
-}
-
-.menu-section-title {
-  font-size: $fs-xs;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: $medium-gray;
-  margin-bottom: $spacing-lg;
 }
 
 .category-link {
@@ -242,19 +231,19 @@
   border-radius: $radius-md;
   color: $text-primary;
   transition: all $transition-fast;
-  font-size: $fs-base;
+  font-size: $fs-5xl;
   font-weight: $fw-medium;
 
   .category-arrow {
     opacity: 0;
     transform: translateX(-10px);
     transition: all $transition-fast;
-    color: $gold;
+    color: $charcoal;
   }
 
   &:hover,
   &.active {
-    background: white;
+    border: 1px solid $charcoal;
     color: $burgundy;
     box-shadow: $shadow-sm;
     
@@ -265,29 +254,12 @@
   }
 }
 
-.view-all-link {
-  display: block;
-  margin-top: $spacing-lg;
-  padding: $spacing-md;
-  text-align: center;
-  color: $burgundy;
-  font-size: $fs-sm;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid $burgundy;
-  border-radius: $radius-md;
-  transition: all $transition-fast;
 
-  &:hover {
-    background: $burgundy;
-    color: $cream;
-  }
-}
 
 // Preview Area
 .preview-area {
-  padding: $spacing-xl;
+  padding-top: 10rem;
+  padding-left: $spacing-3xl;
   display: flex;
   flex-direction: column;
   gap: $spacing-lg;
@@ -394,12 +366,12 @@
 // ANIMATIONS
 // ============================================
 
-@keyframes slideDown {
-  from {
+@keyframes slideDownSmooth {
+  0% {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-100px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
