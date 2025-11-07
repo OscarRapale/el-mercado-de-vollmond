@@ -172,7 +172,7 @@
 
 .mega-menu {
   position: fixed;
-  top: 0; /* Position directly below the navbar */
+  top: 0;
   left: 0;
   right: 0;
   background: #b59866;
@@ -182,11 +182,6 @@
   padding: 0;
   overflow: hidden;
   z-index: -1;
-  
-  /* Smooth slide-down animation */
-  opacity: 0;
-  transform: translateY(-100px);
-  animation: slideDownSmooth 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   pointer-events: all;
 
   @include mobile {
@@ -253,8 +248,6 @@
     }
   }
 }
-
-
 
 // Preview Area
 .preview-area {
@@ -366,22 +359,4 @@
 // ANIMATIONS
 // ============================================
 
-@keyframes slideDownSmooth {
-  0% {
-    opacity: 0;
-    transform: translateY(-100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes menuFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}

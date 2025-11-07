@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { categories, products } from "../../services/api";
@@ -30,7 +31,6 @@ const Navbar = () => {
   const fetchCategories = async () => {
     try {
       const response = await categories.getAll();
-      // Handle both array and paginated response
       setCategoriesList(response.data.results || response.data);
     } catch (error) {
       console.error("error fetching categories:", error);
@@ -60,6 +60,26 @@ const Navbar = () => {
     navigate("/");
   };
 
+  // Framer Motion variants
+  const megaMenuVariants = {
+    hidden: {
+      y: "-100%",
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.65, 0, 0.35, 1],
+      },
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.9,
+        ease: [0.65, 0, 0.35, 1],
+      },
+    },
+  };
+
   return (
     <>
       <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
@@ -80,63 +100,74 @@ const Navbar = () => {
             >
               <button className="navbar-link">Products</button>
 
-              {/* Mega Menu */}
-              {showProductMenu && (
-                <div className="mega-menu">
-                  <div className="mega-menu-grid">
-                    <div className="categories-list">
-                      {categoriesList.map((category) => (
+              {/* Mega Menu with Framer Motion */}
+              <AnimatePresence>
+                {showProductMenu && (
+                  <motion.div
+                    className="mega-menu"
+                    variants={megaMenuVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                  >
+                    <div className="mega-menu-grid">
+                      <div className="categories-list">
+                        {categoriesList.map((category) => (
+                          <Link
+                            key={category.id}
+                            to={`/products?category=${category.slug}`}
+                            className={`category-link ${
+                              hoveredCategory?.id === category.id
+                                ? "active"
+                                : ""
+                            }`}
+                            onMouseEnter={() => handleCategoryHover(category)}
+                            onClick={() => setShowProductMenu(false)}
+                          >
+                            <span className="category-name">
+                              {category.name}
+                            </span>
+                            <span className="category-arrow">→</span>
+                          </Link>
+                        ))}
                         <Link
-                          key={category.id}
-                          to={`/products?category=${category.slug}`}
-                          className={`category-link ${
-                            hoveredCategory?.id === category.id ? "active" : ""
-                          }`}
-                          onMouseEnter={() => handleCategoryHover(category)}
+                          to="/products"
+                          className="category-link"
                           onClick={() => setShowProductMenu(false)}
                         >
-                          <span className="category-name">{category.name}</span>
+                          View All Products
                           <span className="category-arrow">→</span>
                         </Link>
-                      ))}
-                      <Link
-                        to="/products"
-                        className="category-link"
-                        onClick={() => setShowProductMenu(false)}
-                      >
-                        View All Products
-                        <span className="category-arrow">→</span>
-                      </Link>
+                      </div>
 
-                    </div>
-
-                    {/* Image Preview */}
-                    <div className="preview-area">
-                      {hoveredCategory && categoryProducts.length > 0 ? (
-                        <>
-                          <div className="preview-image">
-                            <img
-                              src={categoryProducts[0].image}
-                              alt={categoryProducts[0].name}
-                            />
-                            <div className="preview-overlay">
-                              <h4>{categoryProducts[0].name}</h4>
+                      {/* Image Preview */}
+                      <div className="preview-area">
+                        {hoveredCategory && categoryProducts.length > 0 ? (
+                          <>
+                            <div className="preview-image">
+                              <img
+                                src={categoryProducts[0].image}
+                                alt={categoryProducts[0].name}
+                              />
+                              <div className="preview-overlay">
+                                <h4>{categoryProducts[0].name}</h4>
+                              </div>
                             </div>
+                            <p className="preview-description">
+                              {hoveredCategory.description ||
+                                `Discover our ${hoveredCategory.name.toLowerCase()} collection`}
+                            </p>
+                          </>
+                        ) : (
+                          <div className="preview-placeholder">
+                            <p>Hover over a category to preview</p>
                           </div>
-                          <p className="preview-description">
-                            {hoveredCategory.description ||
-                              `Discover our ${hoveredCategory.name.toLowerCase()} collection`}
-                          </p>
-                        </>
-                      ) : (
-                        <div className="preview-placeholder">
-                          <p>Hover over a category to preview</p>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <Link to="/about" className="navbar-link">
