@@ -170,22 +170,25 @@
 // ============================================
 
 .navbar-dropdown {
-  position: relative;
+  position: static;
 }
 
-.mega-menu-modern {
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: $spacing-lg;
+.mega-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  margin-top: 0;
   background: $cream;
-  border-radius: $radius-xl;
+  border-radius: 0 0 $radius-xl $radius-xl;
   box-shadow: $shadow-2xl;
-  width: 700px;
+  width: 100vw;
   padding: 0;
-  animation: menuFadeIn $transition-base;
+  z-index: 1;
   overflow: hidden;
+  animation: slideDown $transition-base ease-out;
+  transform-origin: top;
+
 
   @include mobile {
     width: 90vw;
@@ -198,10 +201,14 @@
 
 .mega-menu-grid {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 400px 1fr;
+  max-width: 1400px;
+  min-height: 500px;
+  margin: 0 auto;
 
   @include mobile {
     grid-template-columns: 1fr;
+    max-width: 100%;
   }
 }
 
@@ -327,13 +334,6 @@
   }
 }
 
-.preview-price {
-  color: $gold;
-  font-size: $fs-xl;
-  font-weight: $fw-bold;
-  margin: 0;
-}
-
 .preview-description {
   color: $text-secondary;
   font-size: $fs-sm;
@@ -394,13 +394,22 @@
 // ANIMATIONS
 // ============================================
 
-@keyframes menuFadeIn {
+@keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -34,7 +34,7 @@ const Navbar = () => {
     setCategoriesList(response.data.results || response.data);
   } catch (error) {
     console.error("error fetching categories:", error);
-    setCategoriesList([]); // Changed from setCategoryProducts to setCategoriesList
+    setCategoriesList([]);
   }
 };
 
