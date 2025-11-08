@@ -239,6 +239,7 @@ const Navbar = () => {
             </Link>
           </div>
         </div>
+        <div className="nav-line"></div>
       </nav>
     </>
   );
