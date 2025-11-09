@@ -93,26 +93,17 @@
   font-size: $fs-base;
   font-weight: $fw-medium;
   text-transform: uppercase;
-  padding: $spacing-sm 0;
+  padding: 0.5rem 0.9rem;
   transition: color $transition-fast;
   background: none;
   border: none;
   cursor: pointer;
   position: relative;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: $gold;
-    transition: width $transition-base;
-  }
-
   &:hover {
-    color: $gold;
+    border: 1px solid $charcoal;
+    color: $charcoal;
+    border-radius: $radius-sm;
     
     &::after {
       width: 100%;
@@ -201,7 +192,7 @@
 
 .mega-menu-grid {
   display: grid;
-  grid-template-columns: 700px 1fr;
+  grid-template-columns: 900px 1fr;
   max-width: 1600px;
   min-height: 500px;
   margin: 0 auto;
@@ -228,13 +219,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: $spacing-md;
+  padding: $spacing-lg $spacing-xs;
   margin-bottom: $spacing-xs;
   border-radius: $radius-md;
   color: $text-primary;
   transition: all $transition-fast;
   font-size: $fs-5xl;
- letter-spacing: -.045em;
+  letter-spacing: -0.135rem;
 
   .category-arrow {
     opacity: 0;
@@ -246,7 +237,7 @@
   &:hover,
   &.active {
     border: 1px solid $charcoal;
-    color: $burgundy;
+    color: $charcoal;
     box-shadow: $shadow-sm;
     
     .category-arrow {
@@ -272,6 +263,7 @@
 .preview-image {
   position: relative;
   width: 100%;
+  max-width: 600px;
   aspect-ratio: 4/3;
   border-radius: $radius-lg;
   overflow: hidden;
