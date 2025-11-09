@@ -98,7 +98,51 @@ const Navbar = () => {
                 setHoveredCategory(null);
               }}
             >
-              <button className="navbar-link">Products</button>
+              <button className="navbar-link">
+                Products
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ paddingLeft: "4px", paddingTop: "3px"}}
+                  width="17"
+                  height="17"
+                  viewBox="0 0 12 12"
+                >
+                  <g
+                    id="Gruppe_2061"
+                    data-name="Gruppe 2061"
+                    transform="translate(-1067.033 -47)"
+                  >
+                    <circle
+                      id="Ellipse_85"
+                      data-name="Ellipse 85"
+                      cx="6"
+                      cy="6"
+                      r="6"
+                      transform="translate(1067.033 47)"
+                      fill="rgba(165,143,100,0.09)"
+                      opacity="0"
+                    ></circle>
+                    <line
+                      id="Linie_187"
+                      data-name="Linie 187"
+                      y2="10"
+                      transform="translate(1073 48)"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    ></line>
+                    <line
+                      id="Linie_188"
+                      data-name="Linie 188"
+                      x1="10"
+                      transform="translate(1068.033 53)"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.2"
+                    ></line>
+                  </g>
+                </svg>
+              </button>
 
               {/* Mega Menu with Framer Motion */}
               <AnimatePresence>
