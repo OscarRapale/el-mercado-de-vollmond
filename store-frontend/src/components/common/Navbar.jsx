@@ -80,6 +80,29 @@ const Navbar = () => {
     },
   };
 
+  // Image preview animation variants
+  const imageVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  };
+
   return (
     <>
       <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
@@ -99,10 +122,10 @@ const Navbar = () => {
               }}
             >
               <button className="navbar-link">
-                Products
+                Productos
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  style={{ paddingLeft: "4px", paddingTop: "3px"}}
+                  style={{ paddingLeft: "4px", paddingTop: "3px" }}
                   width="17"
                   height="17"
                   viewBox="0 0 12 12"
@@ -144,7 +167,7 @@ const Navbar = () => {
                 </svg>
               </button>
 
-              {/* Mega Menu with Framer Motion */}
+              {/* Mega Menu */}
               <AnimatePresence>
                 {showProductMenu && (
                   <motion.div
@@ -177,6 +200,7 @@ const Navbar = () => {
                         <Link
                           to="/products"
                           className="category-link"
+                          onMouseEnter={() => setHoveredCategory(null)}
                           onClick={() => setShowProductMenu(false)}
                         >
                           View All Products
@@ -186,27 +210,36 @@ const Navbar = () => {
 
                       {/* Image Preview */}
                       <div className="preview-area">
-                        {hoveredCategory && categoryProducts.length > 0 ? (
-                          <>
-                            <div className="preview-image">
-                              <img
-                                src={categoryProducts[0].image}
-                                alt={categoryProducts[0].name}
-                              />
-                              <div className="preview-overlay">
-                                <h4>{categoryProducts[0].name}</h4>
+                        <AnimatePresence mode="wait">
+                          {hoveredCategory && categoryProducts.length > 0 ? (
+                            <motion.div
+                              key={hoveredCategory.id}
+                              variants={imageVariants}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              className="preview-content"
+                            >
+                              <div className="preview-image">
+                                <img
+                                  src={categoryProducts[0].image}
+                                  alt={categoryProducts[0].name}
+                                />
                               </div>
-                            </div>
-                            <p className="preview-description">
-                              {hoveredCategory.description ||
-                                `Discover our ${hoveredCategory.name.toLowerCase()} collection`}
-                            </p>
-                          </>
-                        ) : (
-                          <div className="preview-placeholder">
-                            <p>Hover over a category to preview</p>
-                          </div>
-                        )}
+                            </motion.div>
+                          ) : (
+                            <motion.div
+                              key="placeholder"
+                              variants={imageVariants}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              className="preview-placeholder"
+                            >
+                              <p>Hover over a category to preview</p>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </div>
                   </motion.div>
