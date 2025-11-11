@@ -199,7 +199,7 @@ const Navbar = () => {
                         ))}
                         <Link
                           to="/products"
-                          className="category-link"
+                          className="view-products-link"
                           onMouseEnter={() => setHoveredCategory(null)}
                           onClick={() => setShowProductMenu(false)}
                         >

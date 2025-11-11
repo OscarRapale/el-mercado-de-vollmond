@@ -247,6 +247,38 @@
   }
 }
 
+.view-products-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg $spacing-xs;
+  margin-bottom: $spacing-xs;
+  border-radius: $radius-md;
+  color: $text-primary;
+  transition: all $transition-fast;
+  font-size: $fs-5xl;
+  letter-spacing: -0.135rem;
+
+  .category-arrow {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all $transition-fast;
+    color: $charcoal;
+  }
+
+  &:hover,
+  &.active {
+    border: 1px solid $charcoal;
+    color: $charcoal;
+    box-shadow: $shadow-sm;
+    
+    .category-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
 // Preview Area
 .preview-area {
   padding-top: 3rem;
@@ -279,7 +311,7 @@
   img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
     transition: transform $transition-slow;
   }
 
