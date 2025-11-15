@@ -89,7 +89,7 @@
 
 .story-section {
   padding: $spacing-4xl 0;
-  background: $cream;
+  background: radial-gradient( $light-blue, $midnight-blue, black);
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -98,19 +98,6 @@
 
 .story-container {
   @include container;
-}
-
-.story-label {
-  text-align: center;
-  margin-bottom: $spacing-2xl;
-
-  span {
-    font-size: $fs-xs;
-    font-weight: $fw-semibold;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: $text-secondary;
-  }
 }
 
 .story-grid {
@@ -144,35 +131,57 @@
 
 .story-title {
   font-family: $font-heading;
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: $fw-semibold;
+  font-size: 4rem;
+  font-weight: 500;
   line-height: $lh-tight;
-  color: $text-secondary;
+  color: $gold;
   margin-bottom: $spacing-xl;
 }
 
 .story-description {
-  font-size: $fs-base;
+  font-size: $fs-lg;
   line-height: $lh-relaxed;
-  color: $text-secondary;
+  color: $cream;
   margin-bottom: $spacing-xl;
 }
 
 .story-btn {
-  display: inline-block;
-  padding: $spacing-md $spacing-xl;
-  background: $charcoal;
-  color: $cream;
-  font-size: $fs-sm;
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-md;
+  width: 100%;
+  max-width: 280px;
+  background: none;
+  color: $gold;
+  font-size: $fs-base;
   font-weight: $fw-semibold;
   text-transform: uppercase;
   letter-spacing: 2px;
+  border: 1px solid $gold;
+  border-color: $gold;
   border-radius: $radius-sm;
   transition: all $transition-base;
 
   &:hover {
     background: $gold;
     color: $charcoal;
+    box-shadow: $shadow-sm;
+  }
+
+  .story-arrow {
+    opacity: 1;
+    transform: translateX(-10px);
+    transition: all $transition-fast;
+    color: $gold;
+  }
+
+  &:hover,
+  &.active {
+    .story-arrow {
+      opacity: 1;
+      color: $charcoal;
+      transform: translateX(0);
+    }
   }
 }
 
@@ -182,7 +191,7 @@
 
 .category-showcase {
   padding: $spacing-4xl 0;
-  background: $light-gray;
+  background: radial-gradient( $light-blue, $midnight-blue, black);
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -255,7 +264,7 @@
 .category-card {
   flex-shrink: 0;
   width: 300px;
-  background: $cream;
+  background: $midnight-blue;
   border-radius: $radius-lg;
   overflow: hidden;
   box-shadow: $shadow-md;
@@ -291,7 +300,7 @@
 
 .category-card-title {
   font-size: $fs-xl;
-  font-weight: $fw-semibold;
+  font-weight: $fw-medium;
   color: $text-primary;
   margin-bottom: $spacing-sm;
 }

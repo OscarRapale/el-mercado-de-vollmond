@@ -23,15 +23,15 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <h1 className="hero-main-title">
-            A WORLD
+            EL MERCADO
             <br />
-            OF
+            DE
             <br />
-            ENCHANTMENT
+            VOLLMOND
           </h1>
           
           <Link to="/products" className="hero-cta-btn">
-            DISCOVER OUR BOOKS
+            DESCUBRE MIS HISTORIAS
           </Link>
         </motion.div>
       </div>

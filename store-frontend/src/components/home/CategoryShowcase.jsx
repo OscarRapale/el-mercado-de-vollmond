@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { categories } from '../../services/api';
+import categoryPlaceholder from '../../assets/images/category.png'; 
 
 const CategoryShowcase = () => {
   const [categoriesList, setCategoriesList] = useState([]);
@@ -67,7 +68,7 @@ const CategoryShowcase = () => {
             >
               <div className="category-card-image">
                 <img
-                  src={category.image || `https://images.unsplash.com/photo-${1512820790803 + index}?w=400&q=80`}
+                  src={categoryPlaceholder}
                   alt={category.name}
                 />
               </div>
