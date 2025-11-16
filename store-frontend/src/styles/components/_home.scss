@@ -264,7 +264,7 @@
 .category-card {
   flex-shrink: 0;
   width: 300px;
-  background: $midnight-blue;
+  background: $cream;
   border-radius: $radius-lg;
   overflow: hidden;
   box-shadow: $shadow-md;
@@ -316,7 +316,7 @@
 // ============================================
 
 .newsletter-section {
-  background: $warm-gray;
+  background: $gold-light;
 }
 
 .newsletter-grid {
@@ -357,7 +357,7 @@
   font-size: $fs-4xl;
   font-weight: $fw-semibold;
   line-height: $lh-tight;
-  color: $text-secondary;
+  color: $text-primary;
   margin-bottom: $spacing-lg;
 
   @include mobile {
@@ -367,7 +367,7 @@
 
 .newsletter-subtitle {
   font-size: $fs-base;
-  color: $text-secondary;
+  color: $text-primary;
   margin-bottom: $spacing-2xl;
 }
 
@@ -380,7 +380,7 @@
 .newsletter-input {
   padding: $spacing-lg;
   border: none;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid transparent;
   background: transparent;
   font-size: $fs-base;
   color: $text-primary;
@@ -388,7 +388,7 @@
 
   &:focus {
     outline: none;
-    border-bottom-color: $gold;
+    border-bottom-color: $light-blue;
   }
 
   &::placeholder {
@@ -400,7 +400,7 @@
   display: flex;
   gap: $spacing-md;
   font-size: $fs-sm;
-  color: $text-secondary;
+  color: $text-primary;
   cursor: pointer;
 
   input[type="checkbox"] {
@@ -410,21 +410,41 @@
 }
 
 .newsletter-submit-btn {
-  padding: $spacing-lg $spacing-2xl;
-  background: $charcoal;
-  color: $cream;
-  border: none;
-  font-size: $fs-sm;
+  display: flex;
+  justify-content: space-between;
+  padding: $spacing-md;
+  width: 100%;
+  max-width: 200px;
+  background: none;
+  color: $charcoal;
+  font-size: $fs-base;
   font-weight: $fw-semibold;
   text-transform: uppercase;
   letter-spacing: 2px;
+  border: 1px solid $midnight-blue;
+  border-color: $midnight-blue;
   border-radius: $radius-sm;
-  cursor: pointer;
   transition: all $transition-base;
-  align-self: flex-start;
 
   &:hover {
-    background: $gold;
+    background: $midnight-blue;
+    color: $cream;
+    box-shadow: $shadow-sm;
+  }
+
+  .newsletter-arrow {
+    opacity: 1;
+    transform: translateX(-10px);
+    transition: all $transition-fast;
     color: $charcoal;
+  }
+
+  &:hover,
+  &.active {
+    .newsletter-arrow {
+      opacity: 1;
+      color: $cream;
+      transform: translateX(0);
+    }
   }
 }

@@ -12,7 +12,7 @@ const Newsletter = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Newsletter signup:', formData);
-    // We'll add actual functionality later
+    // add actual functionality later
   };
 
   const handleChange = (e) => {
@@ -95,7 +95,7 @@ const Newsletter = () => {
             </label>
 
             <button type="submit" className="newsletter-submit-btn">
-              I SUBSCRIBE
+              I SUBSCRIBE <span className="newsletter-arrow">→</span>
             </button>
           </form>
         </motion.div>
