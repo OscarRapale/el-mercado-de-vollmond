@@ -41,8 +41,8 @@ const StorySection = () => {
               designed to ignite imagination and touch hearts.
             </p>
 
-            <Link to="/about" className="story-btn">
-              DISCOVER OUR STORY <span className="story-arrow">→</span>
+            <Link to="/about" className="story-btn-animated">
+              Descubre a Vollmond
             </Link>
           </motion.div>
         </div>

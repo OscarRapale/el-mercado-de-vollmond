@@ -99,3 +99,121 @@
   width: 100%;
   text-align: center;
 }
+
+// ============================================
+// EXPANDING PILL BUTTON 
+// ============================================
+
+.btn-pill-expand {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  padding: 0 $spacing-2xl;
+  padding-left: 55px;
+  background: transparent;
+  color: $charcoal;
+  font-size: $fs-base;
+  font-weight: $fw-medium;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // The circle that expands
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 45px;
+    height: 45px;
+    border: 1px solid $charcoal;
+    border-radius: $radius-full;
+    background: transparent;
+    transition: 
+      width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      background 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+      border-radius 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  // Arrow
+  &::after {
+    content: '→';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-55%);
+    font-size: 1.5rem;
+    transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover {
+    color: $cream;
+    padding-left: $spacing-lg;
+    padding-right: 60px;
+    
+    &::before {
+      width: 100%;
+      background: $charcoal;
+      border-radius: 50px;
+    }
+    
+    &::after {
+      left: calc(100% - 35px);
+    }
+  }
+}
+
+
+// ============================================
+// ANIMATED SPECIFIC BUTTONS
+// ============================================
+
+.story-btn-animated {
+  @extend .btn-pill-expand;
+  
+  font-weight: $fw-medium;
+  font-size: $fs-xl;
+  color: $cream;
+  
+  &::before {
+    border-color: $gold;
+  }
+  
+  &:hover {
+    color: $charcoal;
+    
+    &::before {
+      background: $gold;
+    }
+  }
+}
+
+.newsletter-btn-animated {
+  @extend .btn-pill-expand;
+  
+  font-weight: $fw-medium;
+  font-size: $fs-lg;
+  padding-left: 55px;
+  padding-right: $spacing-md;
+  max-width: fit-content;
+  
+  &::before {
+    border-color: $midnight-blue;
+  }
+  
+  &:hover {
+    color: $cream;
+    padding-left: $spacing-lg;
+    padding-right: 55px;
+    
+    &::before {
+      background: $midnight-blue;
+    }
+  }
+}

@@ -94,8 +94,8 @@ const Newsletter = () => {
               </span>
             </label>
 
-            <button type="submit" className="newsletter-submit-btn">
-              I SUBSCRIBE <span className="newsletter-arrow">→</span>
+            <button type="submit" className="newsletter-btn-animated">
+              Suscribir
             </button>
           </form>
         </motion.div>
