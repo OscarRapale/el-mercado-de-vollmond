@@ -1,0 +1,370 @@
+// ============================================
+// PRODUCTS PAGE HERO
+// ============================================
+
+.products-hero {
+  position: relative;
+  height: 50vh;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  margin-top: 90px; // Account for navbar
+
+  @include mobile {
+    min-height: 300px;
+  }
+}
+
+.products-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba($charcoal, 0.6);
+}
+
+.products-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.products-hero-title {
+  font-family: $font-heading;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: $fw-bold;
+  color: $cream;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+// ============================================
+// PRODUCTS SECTION
+// ============================================
+
+.products-section {
+  padding: $spacing-4xl 0;
+  background: $light-gray;
+
+  @include mobile {
+    padding: $spacing-2xl 0;
+  }
+}
+
+.products-container {
+  @include container;
+}
+
+// ============================================
+// SEARCH AND COUNT HEADER
+// ============================================
+
+.products-header {
+  margin-bottom: $spacing-3xl;
+}
+
+.product-search-container {
+  @include flex-between;
+  gap: $spacing-xl;
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+}
+
+.product-count {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.count-number {
+  font-size: $fs-3xl;
+  font-weight: $fw-bold;
+  color: $text-primary;
+}
+
+.count-label {
+  font-size: $fs-sm;
+  font-weight: $fw-medium;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: $text-secondary;
+}
+
+.product-search {
+  position: relative;
+  flex: 1;
+  max-width: 500px;
+
+  @include mobile {
+    max-width: 100%;
+  }
+}
+
+.product-search-input {
+  width: 100%;
+  padding: $spacing-md $spacing-xl;
+  padding-right: 50px;
+  border: 1px solid $border-color;
+  border-radius: $radius-lg;
+  font-size: $fs-base;
+  background: $cream;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $gold;
+  }
+
+  &::placeholder {
+    color: $text-secondary;
+  }
+}
+
+.product-search-btn {
+  position: absolute;
+  right: $spacing-md;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $gold;
+  }
+}
+
+// ============================================
+// PRODUCT GRID
+// ============================================
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-xl;
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+  }
+}
+
+.products-loading,
+.products-empty {
+  text-align: center;
+  padding: $spacing-4xl;
+  color: $text-secondary;
+  font-size: $fs-lg;
+}
+
+// ============================================
+// PRODUCT CARD
+// ============================================
+
+.product-card {
+  background: $cream;
+  border-radius: 0; // Clean, minimal look
+  overflow: hidden;
+  transition: all $transition-base;
+  position: relative;
+
+  &:hover {
+    .product-image {
+      transform: scale(1.02);
+    }
+  }
+}
+
+.product-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+// ============================================
+// IMAGE CONTAINER WITH OVERLAY
+// ============================================
+
+.product-card-image-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: $warm-gray;
+}
+
+.product-card-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+
+  @include mobile {
+    height: 350px;
+  }
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: $spacing-xl;
+  transition: transform $transition-slow;
+}
+
+// Hover Overlay
+.product-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-xl;
+  background: rgba($cream, 0.95);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+
+  &[style*="opacity: 1"] {
+    pointer-events: all;
+  }
+}
+
+// ============================================
+// ACTIONS (QUANTITY + ADD TO CART)
+// ============================================
+
+.product-card-actions {
+  display: flex;
+  gap: $spacing-md;
+  align-items: center;
+}
+
+.product-quantity {
+  display: flex;
+  align-items: center;
+  border: 1px solid $border-color;
+  border-radius: $radius-full;
+  overflow: hidden;
+  background: $cream;
+}
+
+.quantity-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: $text-primary;
+  font-size: $fs-lg;
+  font-weight: $fw-light;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: $light-gray;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.quantity-value {
+  min-width: 40px;
+  text-align: center;
+  font-weight: $fw-medium;
+  font-size: $fs-base;
+}
+
+.product-add-btn {
+  flex: 1;
+  padding: $spacing-md $spacing-xl;
+  background: $charcoal;
+  color: $cream;
+  border: none;
+  border-radius: $radius-full;
+  font-size: $fs-sm;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover:not(:disabled) {
+    background: $gold;
+    color: $charcoal;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// PRODUCT INFO
+// ============================================
+
+.product-card-content {
+  padding: $spacing-xl;
+  padding-top: $spacing-lg;
+  text-align: center;
+}
+
+.product-card-title {
+  font-size: $fs-xl;
+  font-weight: $fw-semibold;
+  color: $text-primary;
+  margin-bottom: $spacing-md;
+  min-height: 2.5em; // Ensure consistent height
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card-description {
+  font-size: $fs-sm;
+  line-height: $lh-relaxed;
+  color: $text-secondary;
+  margin-bottom: $spacing-lg;
+  min-height: 3em; // Ensure consistent height
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-clamp: 2;
+}
+
+.product-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.product-card-price {
+  font-size: $fs-xl;
+  font-weight: $fw-bold;
+  color: $text-primary;
+}
+
+.product-card-price-club {
+  font-size: $fs-xs;
+  color: $text-secondary;
+  text-align: center;
+}

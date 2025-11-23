@@ -31,6 +31,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "slug",
             "description",
+            "short_description",
             "price",
             "stock",
             "low_stock_threshold",
@@ -41,6 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "avarage_rating",
             "review_count",
             "image",
+            "alternative_image",
             "created_at",
             "updated_at"
         ]
