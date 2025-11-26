@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 
@@ -73,9 +73,29 @@ const ProductCard = ({ product, index }) => {
     },
   };
 
+  // Image fade variants
+  const imageVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   // Use alternative image if available, otherwise use main image
   const mainImage = product.image;
   const hoverImage = product.alternative_image || product.image;
+  const currentImage = isHovered ? hoverImage : mainImage;
 
   // Show actions on mobile or on hover for desktop
   const showActions = isMobile || isHovered;
@@ -94,11 +114,18 @@ const ProductCard = ({ product, index }) => {
         {/* Image Container */}
         <div className="product-card-image-container">
           <div className="product-card-image">
-            <img
-              src={isHovered ? hoverImage : mainImage}
-              alt={product.name}
-              className="product-image"
-            />
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentImage} // Key changes trigger the animation
+                src={currentImage}
+                alt={product.name}
+                className="product-image"
+                variants={imageVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              />
+            </AnimatePresence>
           </div>
         </div>
 
