@@ -46,7 +46,7 @@
 
 .products-section {
   padding: $spacing-4xl 0;
-  background: $light-gray;
+  background: radial-gradient( $light-blue, $midnight-blue, black);
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -85,7 +85,7 @@
 .count-number {
   font-size: $fs-3xl;
   font-weight: $fw-bold;
-  color: $text-primary;
+  color: $cream;
 }
 
 .count-label {
@@ -93,7 +93,7 @@
   font-weight: $fw-medium;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: $text-secondary;
+  color: $cream;
 }
 
 .product-search {
@@ -148,8 +148,8 @@
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: $spacing-xl;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm;
 
   @media (max-width: 1400px) {
     grid-template-columns: repeat(3, 1fr);
@@ -169,7 +169,7 @@
 .products-empty {
   text-align: center;
   padding: $spacing-4xl;
-  color: $text-secondary;
+  color: $cream;
   font-size: $fs-lg;
 }
 
@@ -178,8 +178,8 @@
 // ============================================
 
 .product-card {
-  background: $cream;
-  border-radius: 0; // Clean, minimal look
+  border-radius: 0;
+  max-width: 100%;
   overflow: hidden;
   transition: all $transition-base;
   position: relative;
@@ -205,7 +205,6 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: $warm-gray;
 }
 
 .product-card-image {
@@ -232,8 +231,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: $spacing-xl;
-  background: rgba($cream, 0.95);
+  padding: $spacing-3xl;
   backdrop-filter: blur(10px);
   pointer-events: none;
 
@@ -241,6 +239,7 @@
     pointer-events: all;
   }
 }
+
 
 // ============================================
 // ACTIONS (QUANTITY + ADD TO CART)
@@ -250,6 +249,12 @@
   display: flex;
   gap: $spacing-md;
   align-items: center;
+  width: 100%;
+  padding-top: $spacing-md;
+
+  @include mobile {
+    gap: $spacing-sm; // Tighter gap on mobile
+  }
 }
 
 .product-quantity {
@@ -259,6 +264,11 @@
   border-radius: $radius-full;
   overflow: hidden;
   background: $cream;
+  flex-shrink: 0;
+
+  @include mobile {
+    border-width: 2px; // Thicker border for easier touch
+  }
 }
 
 .quantity-btn {
@@ -272,6 +282,12 @@
   cursor: pointer;
   transition: all $transition-fast;
 
+  @include mobile {
+    width: 44px; // Larger touch target
+    height: 44px;
+    font-size: $fs-xl;
+  }
+
   &:hover:not(:disabled) {
     background: $light-gray;
   }
@@ -280,6 +296,11 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+
+  // Better touch feedback
+  &:active:not(:disabled) {
+    background: darken($light-gray, 5%);
+  }
 }
 
 .quantity-value {
@@ -287,31 +308,45 @@
   text-align: center;
   font-weight: $fw-medium;
   font-size: $fs-base;
+
+  @include mobile {
+    min-width: 44px;
+    font-size: $fs-lg;
+  }
 }
 
 .product-add-btn {
   flex: 1;
   padding: $spacing-md $spacing-xl;
-  background: $charcoal;
-  color: $cream;
+  background: $gold;
+  color: $charcoal;
   border: none;
   border-radius: $radius-full;
-  font-size: $fs-sm;
+  font-size: $fs-lg;
   font-weight: $fw-semibold;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
   cursor: pointer;
   transition: all $transition-base;
 
+  @include mobile {
+    padding: $spacing-lg $spacing-md; // Larger padding for touch
+    font-size: $fs-base;
+  }
+
   &:hover:not(:disabled) {
-    background: $gold;
-    color: $charcoal;
+    background: $burgundy-dark;
+    color: $cream;
     transform: translateY(-2px);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  // Touch feedback
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 }
 
@@ -326,26 +361,19 @@
 }
 
 .product-card-title {
-  font-size: $fs-xl;
-  font-weight: $fw-semibold;
-  color: $text-primary;
+  font-size: $fs-2xl;
+  font-weight: $fw-medium;
+  color: $gold;
   margin-bottom: $spacing-md;
-  min-height: 2.5em; // Ensure consistent height
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .product-card-description {
-  font-size: $fs-sm;
+  font-size: $fs-base;
   line-height: $lh-relaxed;
-  color: $text-secondary;
-  margin-bottom: $spacing-lg;
-  min-height: 3em; // Ensure consistent height
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  color: $cream;
+  margin-bottom: $spacing-xs;
+  min-height: 3em;
   overflow: hidden;
   line-clamp: 2;
 }
@@ -358,13 +386,7 @@
 }
 
 .product-card-price {
-  font-size: $fs-xl;
-  font-weight: $fw-bold;
-  color: $text-primary;
-}
-
-.product-card-price-club {
-  font-size: $fs-xs;
-  color: $text-secondary;
-  text-align: center;
+  font-size: $fs-2xl;
+  font-weight: $fw-medium;
+  color: $cream;
 }

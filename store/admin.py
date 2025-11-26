@@ -35,13 +35,13 @@ class ProductAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Basic Information", {
-            "fields": ("category", "name", "slug", "description")
+            "fields": ("category", "name", "slug", "description", "short_description")
         }),
         ("Pricing & Inventory", {
             "fields": ("price", "stock", "is_available")
         }),
         ("Media", {
-            "fields": ("image",)
+            "fields": ("image", "alternative_image")
         }),
     )
 

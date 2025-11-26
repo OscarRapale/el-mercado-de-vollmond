@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext";
@@ -8,8 +8,21 @@ const ProductCard = ({ product, index }) => {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const { addToCart } = useCart();
   const { isAuthenticated } = useAuth();
+
+  // Detect if device is mobile/touch screen
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
@@ -64,6 +77,9 @@ const ProductCard = ({ product, index }) => {
   const mainImage = product.image;
   const hoverImage = product.alternative_image || product.image;
 
+  // Show actions on mobile or on hover for desktop
+  const showActions = isMobile || isHovered;
+
   return (
     <motion.div
       className="product-card"
@@ -98,22 +114,20 @@ const ProductCard = ({ product, index }) => {
             <div className="product-card-price">
               ${parseFloat(product.price).toFixed(2)}
             </div>
-            {product.original_price &&
-              parseFloat(product.original_price) >
-                parseFloat(product.price) && (
-                <div className="product-card-price-club">
-                  ${parseFloat(product.original_price).toFixed(2)} Wine Club
-                  Price
-                </div>
-              )}
           </div>
-        </div>
-        {/* Hover Overlay with Add to Cart */}
+
+          {/* Actions - Always visible on mobile */}
           <motion.div
-            className="product-card-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.3 }}
+            className="product-card-actions-wrapper"
+            initial={{
+              opacity: isMobile ? 1 : 0,
+              height: isMobile ? "auto" : 0,
+            }}
+            animate={{
+              opacity: showActions ? 1 : 0,
+              height: showActions ? "auto" : 0,
+            }}
+            transition={{ duration: isMobile ? 0 : 0.3 }}
           >
             <div className="product-card-actions">
               <div className="product-quantity">
@@ -143,6 +157,7 @@ const ProductCard = ({ product, index }) => {
               </button>
             </div>
           </motion.div>
+        </div>
       </Link>
     </motion.div>
   );
