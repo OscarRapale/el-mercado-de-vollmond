@@ -13,7 +13,7 @@ from django.db import transaction
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from .analytics import AnalyticsService
 from rest_framework.permissions import IsAdminUser
@@ -677,13 +677,16 @@ class CurrentUserView(APIView):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+@ensure_csrf_cookie  # This decorator ensures the CSRF cookie is set
 def get_csrf_token(request):
     """
     Get CSRF token for frontend
     GET /api/csrf/
+    This endpoint sets the CSRF cookie and returns the token
     """
     csrf_token = get_token(request)
-    return JsonResponse({"csrfToken": csrf_token})
+    response = JsonResponse({"csrfToken": csrf_token})
+    return response
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
