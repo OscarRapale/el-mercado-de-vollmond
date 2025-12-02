@@ -89,7 +89,7 @@
 
 .story-section {
   padding: $spacing-4xl 0;
-  background: radial-gradient( $light-blue, $midnight-blue, black);
+  background: $cameo;
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -134,55 +134,15 @@
   font-size: 4rem;
   font-weight: 500;
   line-height: $lh-tight;
-  color: $gold;
+  color: $emerald-green;
   margin-bottom: $spacing-xl;
 }
 
 .story-description {
   font-size: $fs-lg;
   line-height: $lh-relaxed;
-  color: $cream;
+  color: $charcoal;
   margin-bottom: $spacing-xl;
-}
-
-.story-btn {
-  display: flex;
-  justify-content: space-between;
-  padding: $spacing-md;
-  width: 100%;
-  max-width: 280px;
-  background: none;
-  color: $gold;
-  font-size: $fs-base;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  border: 1px solid $gold;
-  border-color: $gold;
-  border-radius: $radius-sm;
-  transition: all $transition-base;
-
-  &:hover {
-    background: $gold;
-    color: $charcoal;
-    box-shadow: $shadow-sm;
-  }
-
-  .story-arrow {
-    opacity: 1;
-    transform: translateX(-10px);
-    transition: all $transition-fast;
-    color: $gold;
-  }
-
-  &:hover,
-  &.active {
-    .story-arrow {
-      opacity: 1;
-      color: $charcoal;
-      transform: translateX(0);
-    }
-  }
 }
 
 // ============================================
@@ -191,7 +151,7 @@
 
 .category-showcase {
   padding: $spacing-4xl 0;
-  background: radial-gradient( $light-blue, $midnight-blue, black);
+  background: $cameo;
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -406,45 +366,5 @@
   input[type="checkbox"] {
     margin-top: 4px;
     flex-shrink: 0;
-  }
-}
-
-.newsletter-submit-btn {
-  display: flex;
-  justify-content: space-between;
-  padding: $spacing-md;
-  width: 100%;
-  max-width: 200px;
-  background: none;
-  color: $charcoal;
-  font-size: $fs-base;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  border: 1px solid $midnight-blue;
-  border-color: $midnight-blue;
-  border-radius: $radius-sm;
-  transition: all $transition-base;
-
-  &:hover {
-    background: $midnight-blue;
-    color: $cream;
-    box-shadow: $shadow-sm;
-  }
-
-  .newsletter-arrow {
-    opacity: 1;
-    transform: translateX(-10px);
-    transition: all $transition-fast;
-    color: $charcoal;
-  }
-
-  &:hover,
-  &.active {
-    .newsletter-arrow {
-      opacity: 1;
-      color: $cream;
-      transform: translateX(0);
-    }
   }
 }

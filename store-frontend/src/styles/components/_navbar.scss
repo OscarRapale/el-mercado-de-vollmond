@@ -5,11 +5,12 @@
   top: 0;
   left: 0;
   right: 0;
+  background: $emerald-green;
   z-index: $z-navbar;
   transition: all $transition-base;
 
   &.navbar-scrolled {
-    background: rgba($charcoal, 0.98);
+    background: rgba($emerald-green, 0.8);
     box-shadow: $shadow-lg;
   }
 }
@@ -162,7 +163,7 @@
 }
 
 // ============================================
-// MODERN MEGA MENU WITH IMAGE PREVIEW & SMOOTH ANIMATION
+// MEGA MENU
 // ============================================
 
 .navbar-dropdown {

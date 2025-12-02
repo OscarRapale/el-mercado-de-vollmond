@@ -46,7 +46,7 @@
 
 .products-section {
   padding: $spacing-4xl 0;
-  background: radial-gradient( $light-blue, $midnight-blue, black);
+  background: $cameo;
 
   @include mobile {
     padding: $spacing-2xl 0;
@@ -85,7 +85,7 @@
 .count-number {
   font-size: $fs-3xl;
   font-weight: $fw-bold;
-  color: $cream;
+  color: $charcoal;
 }
 
 .count-label {
@@ -93,7 +93,7 @@
   font-weight: $fw-medium;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: $cream;
+  color: $charcoal;
 }
 
 .product-search {
@@ -183,6 +183,7 @@
   overflow: hidden;
   transition: all $transition-base;
   position: relative;
+  //background: $light-gray;
 
   &:hover {
     .product-image {
@@ -319,8 +320,8 @@
 .product-add-btn {
   flex: 1;
   padding: $spacing-md $spacing-xl;
-  background: $gold;
-  color: $charcoal;
+  background: $emerald-green;
+  color: $cream;
   border: none;
   border-radius: $radius-full;
   font-size: $fs-lg;
@@ -335,8 +336,8 @@
   }
 
   &:hover:not(:disabled) {
-    background: $burgundy-dark;
-    color: $cream;
+    background: $gold;
+    color: $charcoal;
     transform: translateY(-2px);
   }
 
@@ -364,7 +365,7 @@
 .product-card-title {
   font-size: $fs-2xl;
   font-weight: $fw-medium;
-  color: $gold;
+  color: $emerald-green;
   margin-bottom: $spacing-md;
   overflow: hidden;
 }
@@ -372,7 +373,7 @@
 .product-card-description {
   font-size: $fs-base;
   line-height: $lh-relaxed;
-  color: $cream;
+  color: $charcoal;
   margin-bottom: $spacing-xs;
   min-height: 3em;
   overflow: hidden;
@@ -389,5 +390,5 @@
 .product-card-price {
   font-size: $fs-2xl;
   font-weight: $fw-medium;
-  color: $cream;
+  color: $charcoal;
 }

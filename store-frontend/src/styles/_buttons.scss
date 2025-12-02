@@ -179,17 +179,17 @@
   
   font-weight: $fw-medium;
   font-size: $fs-xl;
-  color: $cream;
+  color: $charcoal;
   
   &::before {
     border-color: $gold;
   }
   
   &:hover {
-    color: $charcoal;
+    color: $cream;
     
     &::before {
-      background: $gold;
+      background: $emerald-green;
     }
   }
 }
@@ -204,7 +204,7 @@
   max-width: fit-content;
   
   &::before {
-    border-color: $midnight-blue;
+    border-color: $emerald-green;
   }
   
   &:hover {
@@ -213,7 +213,7 @@
     padding-right: 55px;
     
     &::before {
-      background: $midnight-blue;
+      background: $emerald-green;
     }
   }
 }
