@@ -1,0 +1,515 @@
+// src/styles/components/_product-detail.scss
+
+// ============================================
+// PRODUCT DETAIL PAGE
+// ============================================
+
+.product-detail {
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: $spacing-4xl;
+  background: $light-gray;
+
+  @include mobile {
+    padding-top: 90px;
+    padding-bottom: $spacing-2xl;
+  }
+}
+
+.product-detail-container {
+  @include container;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-4xl;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: $spacing-2xl;
+  }
+}
+
+.product-detail-loading,
+.product-detail-error {
+  @include flex-center;
+  min-height: 60vh;
+  font-size: $fs-xl;
+  color: $text-secondary;
+}
+
+// ============================================
+// IMAGE GALLERY
+// ============================================
+
+.product-gallery {
+  position: sticky;
+  top: 120px;
+  height: fit-content;
+}
+
+.product-gallery-main {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: $cream;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  margin-bottom: $spacing-lg;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: $spacing-xl;
+  }
+}
+
+.product-gallery-thumbnails {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.gallery-thumbnail {
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  border-radius: $radius-md;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all $transition-fast;
+  background: $cream;
+
+  &.active {
+    border-color: $gold;
+  }
+
+  &:hover {
+    border-color: $burgundy;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+// ============================================
+// PRODUCT INFO
+// ============================================
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.product-detail-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: $fw-semibold;
+  color: $text-primary;
+  line-height: $lh-tight;
+  margin: 0;
+}
+
+.product-detail-price {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-md;
+  font-size: $fs-2xl;
+}
+
+.price-main {
+  font-size: $fs-3xl;
+  font-weight: $fw-bold;
+  color: $text-primary;
+}
+
+.price-club {
+  font-size: $fs-base;
+  color: $text-secondary;
+}
+
+// ============================================
+// EXPANDABLE SECTIONS
+// ============================================
+
+.product-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid $border-color;
+  border-bottom: 1px solid $border-color;
+}
+
+.section-button {
+  @include flex-between;
+  width: 100%;
+  padding: $spacing-lg 0;
+  background: none;
+  border: none;
+  border-bottom: 1px solid $border-color;
+  cursor: pointer;
+  transition: all $transition-fast;
+  font-size: $fs-lg;
+  font-weight: $fw-medium;
+  color: $text-primary;
+  text-align: left;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    color: $burgundy;
+
+    svg {
+      transform: translateX(5px);
+    }
+  }
+
+  svg {
+    transition: transform $transition-fast;
+  }
+}
+
+// ============================================
+// QUANTITY AND ADD TO CART
+// ============================================
+
+.product-actions-section {
+  display: flex;
+  gap: $spacing-lg;
+  align-items: center;
+}
+
+.product-quantity-selector {
+  display: flex;
+  align-items: center;
+  border: 1px solid $border-color;
+  border-radius: $radius-full;
+  overflow: hidden;
+  background: $cream;
+}
+
+.quantity-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background: transparent;
+  color: $text-primary;
+  font-size: $fs-xl;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    background: $light-gray;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.quantity-display {
+  min-width: 50px;
+  text-align: center;
+  font-weight: $fw-semibold;
+  font-size: $fs-xl;
+}
+
+.product-detail-add-btn {
+  flex: 1;
+  padding: $spacing-lg $spacing-2xl;
+  background: $charcoal;
+  color: $cream;
+  border: none;
+  border-radius: $radius-full;
+  font-size: $fs-base;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover:not(:disabled) {
+    background: $burgundy;
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// WINE CLUB CTA
+// ============================================
+
+.wine-club-cta {
+  width: 100%;
+  padding: $spacing-lg;
+  background: transparent;
+  border: 2px solid $burgundy;
+  border-radius: $radius-full;
+  font-size: $fs-base;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: $burgundy;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    background: $burgundy;
+    color: $cream;
+  }
+}
+
+.wine-club-description {
+  font-size: $fs-sm;
+  color: $text-secondary;
+  text-align: center;
+  line-height: $lh-relaxed;
+}
+
+.learn-more-link {
+  color: $burgundy;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: $burgundy-light;
+  }
+}
+
+// ============================================
+// SLIDING PANEL
+// ============================================
+
+.panel-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba($charcoal, 0.7);
+  z-index: $z-modal - 1;
+}
+
+.sliding-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 600px;
+  max-width: 90vw;
+  background: $cream;
+  z-index: $z-modal;
+  overflow-y: auto;
+  box-shadow: $shadow-2xl;
+
+  @include mobile {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.panel-close-btn {
+  position: absolute;
+  top: $spacing-xl;
+  right: $spacing-xl;
+  background: none;
+  border: none;
+  font-size: $fs-sm;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: $text-primary;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $burgundy;
+  }
+
+  .close-x {
+    font-size: $fs-2xl;
+  }
+}
+
+.panel-content {
+  padding: $spacing-4xl;
+  padding-top: 100px;
+
+  @include mobile {
+    padding: $spacing-2xl;
+    padding-top: 80px;
+  }
+}
+
+.panel-header {
+  @include flex-between;
+  margin-bottom: $spacing-2xl;
+}
+
+.panel-title {
+  font-size: $fs-4xl;
+  font-weight: $fw-bold;
+  color: $text-primary;
+  margin: 0;
+}
+
+.panel-section {
+  margin-bottom: $spacing-2xl;
+
+  h3 {
+    font-size: $fs-xl;
+    font-weight: $fw-semibold;
+    margin-bottom: $spacing-md;
+    color: $burgundy;
+  }
+
+  p {
+    line-height: $lh-relaxed;
+    color: $text-secondary;
+  }
+}
+
+.detail-grid {
+  display: grid;
+  gap: $spacing-md;
+}
+
+.detail-item {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.detail-label {
+  font-weight: $fw-semibold;
+  color: $text-primary;
+}
+
+.detail-value {
+  color: $text-secondary;
+}
+
+// ============================================
+// REVIEW FORM
+// ============================================
+
+.review-form-container {
+  background: $light-gray;
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  margin-bottom: $spacing-2xl;
+}
+
+.review-form {
+  h3 {
+    font-size: $fs-xl;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.form-group {
+  margin-bottom: $spacing-lg;
+
+  label {
+    display: block;
+    font-weight: $fw-semibold;
+    margin-bottom: $spacing-sm;
+    color: $text-primary;
+  }
+
+  textarea {
+    width: 100%;
+    padding: $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    font-family: $font-body;
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+      border-color: $burgundy;
+    }
+  }
+}
+
+.star-rating {
+  display: flex;
+  gap: $spacing-xs;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: $fs-3xl;
+  color: $light-gray;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &.active,
+  &:hover {
+    color: $gold;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+}
+
+// ============================================
+// REVIEWS LIST
+// ============================================
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.review-item {
+    padding-bottom: $spacing-xl;
+    border-bottom: 1px solid $border-color;
+    &:last-child {
+    border-bottom: none;
+    }
+}
+
+.review-header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+}
+
+.review-author {
+    strong {
+    color: $text-primary;
+    margin-right: $spacing-sm;
+    }
+}
+.review-date {
+    font-size: $fs-sm;
+    color: $text-secondary;
+}
+
+.review-rating {
+    color: $gold;
+    font-size: $fs-lg;
+}
+
+.review-comment {
+    color: $text-secondary;
+    line-height: $lh-relaxed;
+}
+
+.no-reviews {
+    text-align: center;
+    color: $text-secondary;
+    font-style: italic;
+    padding: $spacing-2xl;
+}
