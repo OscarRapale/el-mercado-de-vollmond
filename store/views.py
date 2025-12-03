@@ -73,7 +73,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({
             "product_id": product.id,
             "product_name": product.name,
-            "average_rating": product.average_rating,
             "total_reviews": product.review_count,
             "rating_distribution": product.rating_distribution,
             "reviews": serializer.data

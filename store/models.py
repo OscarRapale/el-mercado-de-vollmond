@@ -60,16 +60,6 @@ class Product(models.Model):
         return self.stock == 0
     
     @property
-    def avarage_rating(self):
-        """Calculate avarage rating from approved reviews"""
-        from django.db.models import Avg
-        approved_reviews = self.reviews.filter(is_approved=True)
-        if approved_reviews.exists():
-            avg = approved_reviews.aggregate(Avg("rating"))["rating__avg"]
-            return round(avg, 1) if avg else None
-        return None
-    
-    @property
     def review_count(self):
         """Count of approved reviews"""
         return self.reviews.filter(is_approved=True).count()

@@ -12,7 +12,8 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
-    rating: 5,
+    rating: 0,
+    title: "",
     comment: "",
   });
   const [submitting, setSubmitting] = useState(false);
@@ -21,7 +22,7 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
   const fetchReviews = useCallback(async () => {
     try {
       const response = await productsApi.getReviews(product.slug);
-      setReviews(response.data);
+      setReviews(response.data.reviews || []);
     } catch (error) {
       console.error("Error fetching reviews:", error);
       setReviews([]);
@@ -47,11 +48,12 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
       await reviewsApi.create({
         product: product.id,
         rating: formData.rating,
+        title: formData.title,
         comment: formData.comment,
       });
 
       // Reset form
-      setFormData({ rating: 5, comment: "" });
+      setFormData({ rating: 5, title: "", comment: "" });
       setShowForm(false);
 
       // Refresh reviews and product data
@@ -143,6 +145,20 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
                 </div>
               </div>
 
+              {/* Title */}
+              <div className="form-group">
+                <label>Title</label>
+                <textarea
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="Review title"
+                  required
+                  rows="1"
+                />
+              </div>
+
               {/* Comment */}
               <div className="form-group">
                 <label>Your Review</label>
@@ -189,7 +205,7 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
                 <div className="review-header">
                   <div className="review-author">
                     <strong>
-                      {review.user.first_name || review.user.username}
+                      {review.first_name || review.user_name}
                     </strong>
                     <span className="review-date">
                       {new Date(review.created_at).toLocaleDateString()}
@@ -199,6 +215,9 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
                     {"★".repeat(review.rating)}
                     {"☆".repeat(5 - review.rating)}
                   </div>
+                </div>
+                <div>
+                  <p className="review-comment">{review.title}</p>
                 </div>
                 <p className="review-comment">{review.comment}</p>
               </div>

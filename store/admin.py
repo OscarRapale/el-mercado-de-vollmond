@@ -22,7 +22,6 @@ class ProductAdmin(admin.ModelAdmin):
         "stock",
         "low_stock_threshold",
         "stock_status",
-        "avarage_rating_display",
         "review_count",
         "is_available",
         "in_stock",
@@ -85,15 +84,6 @@ class ProductAdmin(admin.ModelAdmin):
         self.message_user(request, ' | '.join(message_parts))
     
     check_low_stock.short_description = "Check stock levels"
-
-    def avarage_rating_display(self, obj):
-        """Display average rating"""
-        avg = obj.avarage_rating
-        if avg:
-            stars = '⭐' * int(avg)
-            return f"{stars} {avg}"
-        return "No reviews"
-    avarage_rating_display.short_description = 'Avg Rating'
     
     def review_count(self, obj):
         """Display number of reviews"""

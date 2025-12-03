@@ -13,13 +13,12 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     """
-    Serializer for Category model
+    Serializer for Product model
     """
     category_name = serializers.CharField(source="category.name", read_only=True)
     in_stock = serializers.BooleanField(read_only=True)
     is_low_stock = serializers.BooleanField(read_only=True)
     is_out_of_stock = serializers.BooleanField(read_only=True)
-    avarage_rating = serializers.FloatField(read_only=True)
     review_count = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -39,7 +38,6 @@ class ProductSerializer(serializers.ModelSerializer):
             "in_stock",
             "is_low_stock",
             "is_out_of_stock",
-            "avarage_rating",
             "review_count",
             "image",
             "alternative_image",
