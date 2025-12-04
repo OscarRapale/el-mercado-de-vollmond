@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activePanel, setActivePanel] = useState(null); // 'details' or 'reviews'
+  const [activePanel, setActivePanel] = useState(null);
 
   const fetchProduct = useCallback(async () => {
     setLoading(true);

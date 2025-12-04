@@ -98,20 +98,20 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
     >
       {/* Close Button */}
       <button className="panel-close-btn" onClick={onClose}>
-        CLOSE <span className="close-x">✕</span>
+        CERRAR <span className="close-x">✕</span>
       </button>
 
       {/* Panel Content */}
       <div className="panel-content">
         <div className="panel-header">
-          <h2 className="panel-title">Reviews</h2>
+          <h2 className="panel-title">Comentarios</h2>
 
           {isAuthenticated && !showForm && (
             <button
               className="btn-secondary btn-sm"
               onClick={() => setShowForm(true)}
             >
-              Write a Review
+              Escribir un comentario
             </button>
           )}
         </div>
@@ -124,11 +124,11 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
             animate={{ opacity: 1, y: 0 }}
           >
             <form onSubmit={handleSubmit} className="review-form">
-              <h3>Write Your Review</h3>
+              <h3>Escribe un comentario</h3>
 
               {/* Rating */}
               <div className="form-group">
-                <label>Rating</label>
+                <label>Calificación</label>
                 <div className="star-rating">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -147,7 +147,7 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
 
               {/* Title */}
               <div className="form-group">
-                <label>Title</label>
+                <label>Título</label>
                 <textarea
                   value={formData.title}
                   onChange={(e) =>
@@ -161,13 +161,13 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
 
               {/* Comment */}
               <div className="form-group">
-                <label>Your Review</label>
+                <label>Comentario</label>
                 <textarea
                   value={formData.comment}
                   onChange={(e) =>
                     setFormData({ ...formData, comment: e.target.value })
                   }
-                  placeholder="Share your thoughts about this product..."
+                  placeholder="Comparte tu opinión sobre este producto..."
                   required
                   rows="5"
                 />
@@ -181,14 +181,14 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
                   onClick={() => setShowForm(false)}
                   disabled={submitting}
                 >
-                  Cancel
+                  Cancelar
                 </button>
                 <button
                   type="submit"
                   className="btn-primary"
                   disabled={submitting}
                 >
-                  {submitting ? "Submitting..." : "Submit Review"}
+                  {submitting ? "Comentando..." : "Comentar"}
                 </button>
               </div>
             </form>
@@ -204,28 +204,24 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
               <div key={review.id} className="review-item">
                 <div className="review-header">
                   <div className="review-author">
-                    <strong>
-                      {review.first_name || review.user_name}
-                    </strong>
+                    <p>{review.first_name || review.user_name}</p>
                     <span className="review-date">
                       {new Date(review.created_at).toLocaleDateString()}
                     </span>
                   </div>
+                </div>
+                <div className="review-title-row">
                   <div className="review-rating">
                     {"★".repeat(review.rating)}
                     {"☆".repeat(5 - review.rating)}
                   </div>
-                </div>
-                <div>
-                  <p className="review-comment">{review.title}</p>
+                  <strong className="review-title">{review.title}</strong>
                 </div>
                 <p className="review-comment">{review.comment}</p>
               </div>
             ))
           ) : (
-            <p className="no-reviews">
-              No reviews yet. Be the first to review this product!
-            </p>
+            <p className="no-reviews">No hay comentarios todavia.</p>
           )}
         </div>
       </div>

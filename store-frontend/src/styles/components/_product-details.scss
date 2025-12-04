@@ -6,9 +6,9 @@
 
 .product-detail {
   min-height: 100vh;
-  padding-top: 120px;
+  padding-top: 200px;
   padding-bottom: $spacing-4xl;
-  background: $light-gray;
+  background: $cameo;
 
   @include mobile {
     padding-top: 90px;
@@ -104,7 +104,8 @@
 
 .product-detail-title {
   font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: $fw-semibold;
+  font-weight: $fw-normal;
+  letter-spacing: -0.135rem;
   color: $text-primary;
   line-height: $lh-tight;
   margin: 0;
@@ -119,13 +120,8 @@
 
 .price-main {
   font-size: $fs-3xl;
-  font-weight: $fw-bold;
+  font-weight: $fw-normal;
   color: $text-primary;
-}
-
-.price-club {
-  font-size: $fs-base;
-  color: $text-secondary;
 }
 
 // ============================================
@@ -136,8 +132,8 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  border-top: 1px solid $border-color;
-  border-bottom: 1px solid $border-color;
+  border-top: 1px solid $charcoal;
+  border-bottom: 1px solid $charcoal;
 }
 
 .section-button {
@@ -146,7 +142,7 @@
   padding: $spacing-lg 0;
   background: none;
   border: none;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $charcoal;
   cursor: pointer;
   transition: all $transition-fast;
   font-size: $fs-lg;
@@ -159,7 +155,7 @@
   }
 
   &:hover {
-    color: $burgundy;
+    color: $emerald-green;
 
     svg {
       transform: translateX(5px);
@@ -220,7 +216,7 @@
 .product-detail-add-btn {
   flex: 1;
   padding: $spacing-lg $spacing-2xl;
-  background: $charcoal;
+  background: $emerald-green;
   color: $cream;
   border: none;
   border-radius: $radius-full;
@@ -232,54 +228,14 @@
   transition: all $transition-base;
 
   &:hover:not(:disabled) {
-    background: $burgundy;
+    background: $gold;
+    color: $charcoal;
     transform: translateY(-2px);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-}
-
-// ============================================
-// WINE CLUB CTA
-// ============================================
-
-.wine-club-cta {
-  width: 100%;
-  padding: $spacing-lg;
-  background: transparent;
-  border: 2px solid $burgundy;
-  border-radius: $radius-full;
-  font-size: $fs-base;
-  font-weight: $fw-semibold;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: $burgundy;
-  cursor: pointer;
-  transition: all $transition-base;
-
-  &:hover {
-    background: $burgundy;
-    color: $cream;
-  }
-}
-
-.wine-club-description {
-  font-size: $fs-sm;
-  color: $text-secondary;
-  text-align: center;
-  line-height: $lh-relaxed;
-}
-
-.learn-more-link {
-  color: $burgundy;
-  text-decoration: underline;
-  cursor: pointer;
-
-  &:hover {
-    color: $burgundy-light;
   }
 }
 
@@ -330,7 +286,7 @@
   transition: color $transition-fast;
 
   &:hover {
-    color: $burgundy;
+    color: $emerald-green;
   }
 
   .close-x {
@@ -367,7 +323,7 @@
     font-size: $fs-xl;
     font-weight: $fw-semibold;
     margin-bottom: $spacing-md;
-    color: $burgundy;
+    color: $emerald-green;
   }
 
   p {
@@ -433,7 +389,7 @@
 
     &:focus {
       outline: none;
-      border-color: $burgundy;
+      border-color: $emerald-green;
     }
   }
 }
@@ -447,7 +403,7 @@
   background: none;
   border: none;
   font-size: $fs-3xl;
-  color: $light-gray;
+  color: #d4d4d4;
   cursor: pointer;
   transition: all $transition-fast;
 
@@ -482,29 +438,47 @@
 }
 
 .review-header {
-    @include flex-between;
-    margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
 }
 
 .review-author {
-    strong {
+  p {
     color: $text-primary;
-    margin-right: $spacing-sm;
-    }
+    font-weight: $fw-semibold;
+    margin: 0;
+  }
 }
+
 .review-date {
-    font-size: $fs-sm;
-    color: $text-secondary;
+  font-size: $fs-sm;
+  color: $text-secondary;
+  display: block;
+  margin-top: $spacing-xs;
+}
+
+.review-title-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.review-title {
+  font-size: $fs-lg;
+  color: $text-primary;
+  margin: 0;
 }
 
 .review-rating {
-    color: $gold;
-    font-size: $fs-lg;
+  color: $gold;
+  font-size: $fs-xl;
+  white-space: nowrap;
 }
 
 .review-comment {
-    color: $text-secondary;
-    line-height: $lh-relaxed;
+  color: $text-secondary;
+  line-height: $lh-relaxed;
+  margin: 0;
 }
 
 .no-reviews {

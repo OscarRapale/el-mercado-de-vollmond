@@ -1,7 +1,7 @@
 // src/components/products/ProductInfo.jsx
-import React, { useState } from 'react';
-import { useCart } from '../../context/CartContext';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState } from "react";
+import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
 
 const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
   const [quantity, setQuantity] = useState(1);
@@ -11,7 +11,7 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      alert('Please login to add items to cart');
+      alert("Please login to add items to cart");
       return;
     }
 
@@ -21,7 +21,7 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
     if (result.success) {
       setQuantity(1);
     } else {
-      alert(result.error || 'Failed to add to cart');
+      alert(result.error || "Failed to add to cart");
     }
     setIsAdding(false);
   };
@@ -41,61 +41,36 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
 
       {/* Price */}
       <div className="product-detail-price">
-        <span className="price-main">${parseFloat(product.price).toFixed(2)}</span>
-        {product.original_price && parseFloat(product.original_price) > parseFloat(product.price) && (
-          <span className="price-club">
-            | ${parseFloat(product.original_price).toFixed(2)} Club Price
-          </span>
-        )}
+        <span className="price-main">
+          ${parseFloat(product.price).toFixed(2)}
+        </span>
       </div>
 
       {/* Expandable Sections */}
       <div className="product-sections">
         {/* Full Description Button */}
-        <button 
-          className="section-button"
-          onClick={() => openPanel('details')}
-        >
-          <span>Full Description</span>
+        <button className="section-button" onClick={() => openPanel("details")}>
+          <span>Descripción</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path
+              d="M7 3L14 10L7 17"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
 
-        {/* Technical Info (if available) */}
-        {product.technical_info && (
-          <button 
-            className="section-button"
-            onClick={() => openPanel('details')}
-          >
-            <span>Technical</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </button>
-        )}
-
-        {/* Winemaking (if available) */}
-        {product.winemaking_info && (
-          <button 
-            className="section-button"
-            onClick={() => openPanel('details')}
-          >
-            <span>Winemaking</span>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </button>
-        )}
-
         {/* Reviews Button */}
-        <button 
-          className="section-button"
-          onClick={() => openPanel('reviews')}
-        >
-          <span>Reviews ({product.review_count || 0})</span>
+        <button className="section-button" onClick={() => openPanel("reviews")}>
+          <span>Comentarios ({product.review_count || 0})</span>
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M7 3L14 10L7 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path
+              d="M7 3L14 10L7 17"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
           </svg>
         </button>
       </div>
@@ -103,16 +78,16 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
       {/* Quantity and Add to Cart */}
       <div className="product-actions-section">
         <div className="product-quantity-selector">
-          <button 
-            className="quantity-btn" 
+          <button
+            className="quantity-btn"
             onClick={handleDecrement}
             disabled={quantity <= 1}
           >
             −
           </button>
           <span className="quantity-display">{quantity}</span>
-          <button 
-            className="quantity-btn" 
+          <button
+            className="quantity-btn"
             onClick={handleIncrement}
             disabled={quantity >= product.stock || product.stock === 0}
           >
@@ -125,7 +100,7 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
           onClick={handleAddToCart}
           disabled={isAdding || product.stock === 0}
         >
-          {isAdding ? 'ADDING...' : 'ADD TO CART'}
+          {isAdding ? "ADDING..." : "ADD TO CART"}
         </button>
       </div>
     </div>
