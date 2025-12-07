@@ -6,7 +6,7 @@ const ProductSearch = ({ searchQuery, setSearchQuery, productCount }) => {
       {/* Left - Product Count */}
       <div className="product-count">
         <span className="count-number">{productCount}</span>
-        <span className="count-label">PRODUCTS</span>
+        <span className="count-label">ARTÍCULOS</span>
       </div>
 
       {/* Right - Search Bar */}

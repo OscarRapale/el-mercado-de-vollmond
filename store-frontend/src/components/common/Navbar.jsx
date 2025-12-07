@@ -203,7 +203,7 @@ const Navbar = () => {
                           onMouseEnter={() => setHoveredCategory(null)}
                           onClick={() => setShowProductMenu(false)}
                         >
-                          View All Products
+                          Todos Los Productos
                           <span className="category-arrow">→</span>
                         </Link>
                       </div>

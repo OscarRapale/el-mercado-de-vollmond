@@ -8,7 +8,7 @@ import ProductSearch from "../components/products/ProductSearch";
 const Products = () => {
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState(null); // Changed from true to null
+  const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const categorySlug = searchParams.get("category");
@@ -31,23 +31,28 @@ const Products = () => {
   }, [categorySlug, searchQuery]);
 
   const fetchCategory = useCallback(async () => {
+    if (!categorySlug) {
+      // Reset category when there's no slug (View All Products)
+      setCategory(null);
+      return;
+    }
+
     try {
       const response = await categories.getAll();
       const allCategories = response.data.results || response.data;
       const foundCategory = allCategories.find(
         (cat) => cat.slug === categorySlug
       );
-      setCategory(foundCategory);
+      setCategory(foundCategory || null);
     } catch (error) {
       console.error("Error fetching category:", error);
+      setCategory(null);
     }
   }, [categorySlug]);
 
   useEffect(() => {
     fetchProducts();
-    if (categorySlug) {
-      fetchCategory();
-    }
+    fetchCategory();
   }, [categorySlug, searchQuery, fetchProducts, fetchCategory]);
 
   return (
@@ -61,6 +66,7 @@ const Products = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            key={category?.name || "all-products"}
           >
             {category ? category.name : "Todos los productos"}
           </motion.h1>

@@ -153,7 +153,8 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  placeholder="Review title"
+                  placeholder="Título
+                  "
                   required
                   rows="1"
                 />

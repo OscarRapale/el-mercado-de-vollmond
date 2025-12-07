@@ -356,22 +356,39 @@
 // USER DROPDOWN
 // ============================================
 
+.navbar-dropdown {
+  position: relative;
+  
+  // Add invisible bridge area
+  &::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -$spacing-md;
+    right: -$spacing-md;
+    height: $spacing-md; // Bridge height
+    background: transparent;
+    z-index: 99;
+  }
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: calc(100% + $spacing-sm);
-  right: 0;
+  top: calc(100% + $spacing-md); // Match bridge height
+  right: 0; // Changed from -$spacing-sm for better alignment
   background: $cream;
   border-radius: $radius-lg;
   box-shadow: $shadow-xl;
   min-width: 180px;
   padding: $spacing-sm;
-  animation: menuFadeIn $transition-fast;
   border: 1px solid $warm-gray;
+  z-index: 100;
+}
 
-  .navbar-dropdown:hover & {
-    display: block;
-  }
+// Show dropdown on hover of parent container
+.navbar-dropdown:hover .dropdown-menu {
+  display: block;
 }
 
 .dropdown-item {
