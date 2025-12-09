@@ -15,7 +15,7 @@ const Cart = () => {
     removeFromCart,
     updateCartItem,
     applyCoupon,
-  } = useCart(); // Changed from updateQuantity to updateCartItem
+  } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
@@ -94,7 +94,7 @@ const Cart = () => {
                   item={item}
                   index={index}
                   onRemove={removeFromCart}
-                  onUpdateQuantity={updateCartItem} // Changed from updateQuantity to updateCartItem
+                  onUpdateQuantity={updateCartItem}
                 />
               ))}
             </AnimatePresence>

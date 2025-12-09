@@ -18,6 +18,11 @@
 
 .cart-container {
   @include container;
+  
+  @include mobile {
+    padding-left: $spacing-md;
+    padding-right: $spacing-md;
+  }
 }
 
 .cart-loading {
@@ -33,10 +38,12 @@
 
 .cart-header {
   margin-bottom: $spacing-3xl;
+  padding-top: 2rem;
   text-align: center;
 
   @include mobile {
-    margin-bottom: $spacing-2xl;
+    margin-bottom: $spacing-xl;
+    padding-top: $spacing-lg;
   }
 }
 
@@ -47,13 +54,17 @@
   margin-bottom: $spacing-sm;
 
   @include mobile {
-    font-size: $fs-3xl;
+    font-size: $fs-2xl;
   }
 }
 
 .cart-subtitle {
   font-size: $fs-lg;
   color: $text-secondary;
+  
+  @include mobile {
+    font-size: $fs-base;
+  }
 }
 
 // ============================================
@@ -68,7 +79,7 @@
 
   @include mobile {
     grid-template-columns: 1fr;
-    gap: $spacing-2xl;
+    gap: $spacing-xl;
   }
 }
 
@@ -80,6 +91,10 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-lg;
+  
+  @include mobile {
+    gap: $spacing-md;
+  }
 }
 
 .cart-item {
@@ -93,9 +108,9 @@
   position: relative;
 
   @include mobile {
-    grid-template-columns: 80px 1fr;
-    gap: $spacing-md;
-    padding: $spacing-lg;
+    grid-template-columns: 70px 1fr; // Made image smaller
+    gap: $spacing-sm;
+    padding: $spacing-md;
   }
 }
 
@@ -106,10 +121,11 @@
   border-radius: $radius-md;
   overflow: hidden;
   background: $light-gray;
+  flex-shrink: 0; // Prevent shrinking
 
   @include mobile {
-    width: 80px;
-    height: 80px;
+    width: 70px; // Reduced from 80px
+    height: 70px;
   }
 
   img {
@@ -129,6 +145,7 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-sm;
+  min-width: 0; // Allow text truncation
 }
 
 .cart-item-name {
@@ -143,13 +160,24 @@
   }
 
   @include mobile {
-    font-size: $fs-base;
+    font-size: $fs-sm; // Reduced font size
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // Limit to 2 lines
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }
 
 .cart-item-price {
   font-size: $fs-base;
   color: $text-secondary;
+  
+  @include mobile {
+    font-size: $fs-sm;
+    font-weight: $fw-semibold;
+    color: $text-primary;
+  }
 }
 
 // Quantity Controls - Desktop
@@ -175,6 +203,7 @@
     flex-direction: column;
     gap: $spacing-sm;
     margin-top: $spacing-sm;
+    width: 100%; // Full width for mobile
   }
 }
 
@@ -186,6 +215,11 @@
   overflow: hidden;
   background: $light-gray;
   align-self: flex-start;
+  
+  @include mobile {
+    align-self: stretch; // Full width on mobile
+    justify-content: space-between;
+  }
 }
 
 .quantity-btn {
@@ -197,6 +231,12 @@
   font-size: $fs-lg;
   cursor: pointer;
   transition: all $transition-fast;
+
+  @include mobile {
+    width: 36px;
+    height: 36px;
+    font-size: $fs-base;
+  }
 
   &:hover:not(:disabled) {
     background: $warm-gray;
@@ -213,6 +253,11 @@
   text-align: center;
   font-weight: $fw-semibold;
   font-size: $fs-base;
+  
+  @include mobile {
+    flex: 1; // Take up remaining space
+    font-size: $fs-sm;
+  }
 }
 
 // Subtotal - Desktop
@@ -259,11 +304,12 @@
     color: $error;
     border: 1px solid $error;
     border-radius: $radius-md;
-    font-size: $fs-sm;
+    font-size: $fs-xs;
     font-weight: $fw-medium;
     cursor: pointer;
     transition: all $transition-fast;
-    align-self: flex-start;
+    width: 100%;
+    text-align: center;
 
     &:hover {
       background: $error;
@@ -278,6 +324,10 @@
 
 .continue-shopping {
   padding-top: $spacing-lg;
+  
+  @include mobile {
+    padding-top: $spacing-md;
+  }
 }
 
 .continue-shopping-link {
@@ -289,6 +339,10 @@
   font-weight: $fw-medium;
   text-decoration: none;
   transition: color $transition-fast;
+
+  @include mobile {
+    font-size: $fs-sm;
+  }
 
   &:hover {
     color: $emerald-green;
@@ -309,6 +363,7 @@
 
   @include mobile {
     position: static;
+    padding: $spacing-lg;
   }
 }
 
@@ -319,6 +374,12 @@
   margin-bottom: $spacing-xl;
   padding-bottom: $spacing-lg;
   border-bottom: 1px solid $border-color;
+  
+  @include mobile {
+    font-size: $fs-xl;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-md;
+  }
 }
 
 .cart-summary-details {
@@ -326,6 +387,11 @@
   flex-direction: column;
   gap: $spacing-md;
   margin-bottom: $spacing-xl;
+  
+  @include mobile {
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .summary-row {
@@ -334,6 +400,10 @@
   align-items: center;
   font-size: $fs-base;
   color: $text-secondary;
+
+  @include mobile {
+    font-size: $fs-sm;
+  }
 
   &.summary-discount {
     color: $success;
@@ -345,6 +415,11 @@
     color: $text-primary;
     padding-top: $spacing-lg;
     border-top: 1px solid $border-color;
+    
+    @include mobile {
+      font-size: $fs-lg;
+      padding-top: $spacing-md;
+    }
   }
 }
 
@@ -360,6 +435,11 @@
   font-weight: $fw-bold;
   text-transform: uppercase;
   margin-left: $spacing-sm;
+  
+  @include mobile {
+    margin-left: $spacing-xs;
+    padding: 2px $spacing-xs;
+  }
 }
 
 .remove-coupon-btn {
@@ -385,6 +465,11 @@
   display: flex;
   gap: $spacing-sm;
   margin-bottom: $spacing-lg;
+  
+  @include mobile {
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
 }
 
 .coupon-input {
@@ -394,6 +479,11 @@
   border-radius: $radius-md;
   font-size: $fs-base;
   text-transform: uppercase;
+
+  @include mobile {
+    padding: $spacing-sm;
+    font-size: $fs-sm;
+  }
 
   &:focus {
     outline: none;
@@ -412,6 +502,11 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: all $transition-fast;
+  
+  @include mobile {
+    padding: $spacing-sm $spacing-md;
+    font-size: $fs-xs;
+  }
 
   &:hover:not(:disabled) {
     background: $light-green;
@@ -430,6 +525,11 @@
   border-radius: $radius-md;
   font-size: $fs-sm;
   margin-bottom: $spacing-lg;
+  
+  @include mobile {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $fs-xs;
+  }
 }
 
 // ============================================
@@ -451,6 +551,12 @@
   transition: all $transition-base;
   margin-bottom: $spacing-lg;
 
+  @include mobile {
+    padding: $spacing-md;
+    font-size: $fs-base;
+    margin-bottom: $spacing-md;
+  }
+
   &:hover {
     background: $light-green;
     transform: translateY(-2px);
@@ -469,6 +575,10 @@
   gap: $spacing-sm;
   color: $text-secondary;
   font-size: $fs-sm;
+  
+  @include mobile {
+    font-size: $fs-xs;
+  }
 
   svg {
     color: $success;
@@ -484,13 +594,28 @@
   @include flex-center;
   flex-direction: column;
   text-align: center;
-  padding: $spacing-4xl $spacing-xl;
+  padding-top: 10rem;
+  
+  @include mobile {
+    padding-top: 4rem;
+    padding-left: $spacing-md;
+    padding-right: $spacing-md;
+  }
 }
 
 .empty-cart-icon {
   margin-bottom: $spacing-2xl;
   color: $text-secondary;
   opacity: 0.5;
+  
+  @include mobile {
+    margin-bottom: $spacing-lg;
+    
+    svg {
+      width: 80px;
+      height: 80px;
+    }
+  }
 }
 
 .empty-cart-title {
@@ -498,6 +623,11 @@
   font-weight: $fw-bold;
   color: $text-primary;
   margin-bottom: $spacing-lg;
+  
+  @include mobile {
+    font-size: $fs-xl;
+    margin-bottom: $spacing-md;
+  }
 }
 
 .empty-cart-description {
@@ -506,6 +636,11 @@
   line-height: $lh-relaxed;
   max-width: 500px;
   margin-bottom: $spacing-2xl;
+  
+  @include mobile {
+    font-size: $fs-base;
+    margin-bottom: $spacing-xl;
+  }
 }
 
 .empty-cart-btn {
@@ -519,6 +654,11 @@
   letter-spacing: 1px;
   text-decoration: none;
   transition: all $transition-base;
+
+  @include mobile {
+    padding: $spacing-md $spacing-xl;
+    font-size: $fs-sm;
+  }
 
   &:hover {
     background: $light-green;
