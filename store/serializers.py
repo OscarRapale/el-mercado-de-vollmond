@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Category, Product, Cart, CartItem, Order, OrderItem, Coupon, ProductReview
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 class CategorySerializer(serializers.ModelSerializer):
     """
@@ -99,6 +100,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     """
     Serializer for Cart model
+    Now includes total, shipping_cost, and discount_amount for frontend calculations
     """
     items = CartItemSerializer(many=True, read_only=True)
     total_items = serializers.IntegerField(read_only=True)
@@ -107,6 +109,11 @@ class CartSerializer(serializers.ModelSerializer):
         decimal_places=2, 
         read_only=True
     )
+    # New computed fields for checkout
+    shipping_cost = serializers.SerializerMethodField()
+    discount_amount = serializers.SerializerMethodField()
+    total = serializers.SerializerMethodField()
+    coupon = serializers.SerializerMethodField()
     
     class Meta:
         model = Cart
@@ -116,10 +123,47 @@ class CartSerializer(serializers.ModelSerializer):
             'items',
             'total_items',
             'subtotal',
+            'shipping_cost',
+            'discount_amount',
+            'coupon',
+            'total',
             'created_at',
             'updated_at'
         ]
         read_only_fields = ['user', 'created_at', 'updated_at']
+    
+    def get_shipping_cost(self, obj):
+        """
+        Calculate shipping cost
+        Free shipping over $50, otherwise $5
+        """
+        subtotal = obj.subtotal or Decimal('0')
+        if not obj.items.exists():
+            return Decimal('0.00')
+        if subtotal >= Decimal('50.00'):
+            return Decimal('0.00')
+        return Decimal('5.00')
+    
+    def get_discount_amount(self, obj):
+        """
+        Get discount from context (set when coupon is applied)
+        """
+        return self.context.get('discount_amount', Decimal('0.00'))
+    
+    def get_coupon(self, obj):
+        """
+        Get coupon info from context
+        """
+        return self.context.get('coupon_data', None)
+    
+    def get_total(self, obj):
+        """
+        Calculate total: subtotal + shipping - discount
+        """
+        subtotal = obj.subtotal or Decimal('0')
+        shipping = self.get_shipping_cost(obj)
+        discount = self.get_discount_amount(obj)
+        return subtotal + shipping - discount
     
 class OrderItemSerializer(serializers.ModelSerializer):
     """
@@ -141,6 +185,7 @@ class OrderSerializer(serializers.ModelSerializer):
     Serializer for Order model
     """
     items = OrderItemSerializer(many=True, read_only=True)
+    coupon_code = serializers.SerializerMethodField()
     
     class Meta:
         model = Order
@@ -183,6 +228,10 @@ class OrderSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at'
         ]
+    
+    def get_coupon_code(self, obj):
+        """Return coupon code if exists"""
+        return obj.coupon.code if obj.coupon else None
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -241,6 +290,7 @@ class ProductReviewSerializer(serializers.ModelSerializer):
     Serializer for ProductReview model
     """
     user_name = serializers.CharField(source='user.username', read_only=True)
+    first_name = serializers.CharField(source='user.first_name', read_only=True)
     is_verified_purchase = serializers.BooleanField(read_only=True)
     
     class Meta:
@@ -250,6 +300,7 @@ class ProductReviewSerializer(serializers.ModelSerializer):
             'product',
             'user',
             'user_name',
+            'first_name',
             'rating',
             'title',
             'comment',
