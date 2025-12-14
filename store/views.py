@@ -325,26 +325,26 @@ class CartViewSet(viewsets.ModelViewSet):
                     coupon.times_used += 1
                     coupon.save()
 
-                # Create order items from cart items
+                # Create order items from cart
                 for cart_item in cart.items.all():
+                    # Build absolute URL for product image
+                    product_image_url = None
+                    if cart_item.product.image:
+                        product_image_url = request.build_absolute_uri(cart_item.product.image.url)
+                    
                     OrderItem.objects.create(
                         order=order,
                         product=cart_item.product,
                         product_name=cart_item.product.name,
                         product_price=cart_item.product.price,
-                        quantity=cart_item.quantity,
+                        product_image=product_image_url,  # Add this line
+                        quantity=cart_item.quantity
                     )
-
-                    # Reduce product stock
-                    product = cart_item.product
-                    product.stock -= cart_item.quantity
-
-                    # Auto-disable if out of stock
-                    if product.stock == 0:
-                        product.is_available = False
-
-                    product.save()
-
+                    
+                    # Reduce stock
+                    cart_item.product.stock -= cart_item.quantity
+                    cart_item.product.save()
+    
                 # Create Stripe checkout session
                 success_url = request.data.get(
                     'success_url', 

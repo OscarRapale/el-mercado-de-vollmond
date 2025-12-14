@@ -9,6 +9,9 @@ import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import OrderSuccess from "./pages/OrderSuccess";
+import Orders from "./pages/Orders";
+import OrderDetail from "./pages/OrderDetail";
 import Login from "./pages/Login";
 
 function App() {
@@ -25,6 +28,9 @@ function App() {
               <Route path="/products/:slug" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order/success" element={<OrderSuccess />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/orders/:orderId" element={<OrderDetail />} />
               <Route path="/login" element={<Login />} />
             </Routes>
           </div>

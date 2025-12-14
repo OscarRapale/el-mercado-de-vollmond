@@ -1,13 +1,7 @@
 // src/components/checkout/PaymentForm.jsx
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
 import StripePaymentForm from "./StripePaymentForm";
-import { stripe as stripeApi } from "../../services/api";
-
-// Initialize Stripe
-let stripePromise = null;
 
 const PaymentForm = ({
   shippingInfo,
@@ -15,40 +9,7 @@ const PaymentForm = ({
   paymentMethod,
   setPaymentMethod,
   onBack,
-  onSuccess,
 }) => {
-  const [stripeLoading, setStripeLoading] = useState(false);
-  const [stripeError, setStripeError] = useState(null);
-
-  // Initialize Stripe
-  React.useEffect(() => {
-    const initializeStripe = async () => {
-      if (!stripePromise) {
-        setStripeLoading(true);
-        try {
-          const response = await stripeApi.getConfig();
-          const publishableKey = response.data.publicKey;
-
-          if (!publishableKey) {
-            throw new Error("Stripe publishable key not found");
-          }
-
-          stripePromise = loadStripe(publishableKey);
-          setStripeError(null);
-        } catch (error) {
-          console.error("Error loading Stripe:", error);
-          setStripeError(
-            "Failed to load payment system. Please refresh the page."
-          );
-        } finally {
-          setStripeLoading(false);
-        }
-      }
-    };
-
-    initializeStripe();
-  }, []);
-
   return (
     <motion.div
       className="payment-form"
@@ -82,42 +43,21 @@ const PaymentForm = ({
               />
             </svg>
             <div>
-              <strong>Tarjeta de Crédito/Débito</strong>
-              <p>Pago seguro con Stripe</p>
+              <strong>Pago con Stripe</strong>
+              <p>Tarjeta, Apple Pay, Google Pay y más</p>
             </div>
           </div>
         </label>
       </div>
 
-      {/* Error Message */}
-      {stripeError && <div className="payment-error">{stripeError}</div>}
-
-      {/* Loading State */}
-      {stripeLoading && (
-        <div className="payment-loading">
-          <p>Cargando sistema de pago...</p>
-        </div>
-      )}
-
       {/* Stripe Payment Form */}
-      {paymentMethod === "stripe" &&
-        stripePromise &&
-        !stripeLoading &&
-        !stripeError && (
-          <Elements stripe={stripePromise}>
-            <StripePaymentForm
-              shippingInfo={shippingInfo}
-              cart={cart}
-              onBack={onBack}
-              onSuccess={onSuccess}
-            />
-          </Elements>
-        )}
-
-      {/* Back Button */}
-      <button type="button" className="back-btn" onClick={onBack}>
-        ← Volver a Envío
-      </button>
+      {paymentMethod === "stripe" && (
+        <StripePaymentForm
+          shippingInfo={shippingInfo}
+          cart={cart}
+          onBack={onBack}
+        />
+      )}
     </motion.div>
   );
 };

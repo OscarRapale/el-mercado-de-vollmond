@@ -261,6 +261,7 @@ class OrderItem(models.Model):
     )
     product_name = models.CharField(max_length=200)
     product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    product_image = models.URLField(max_length=500, blank=True, null=True)
     quantity = models.PositiveIntegerField(default=1)
 
     class Meta:

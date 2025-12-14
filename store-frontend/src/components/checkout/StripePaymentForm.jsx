@@ -1,176 +1,159 @@
 // src/components/checkout/StripePaymentForm.jsx
 import React, { useState } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { cart as cartApi } from "../../services/api";
 
-const StripePaymentForm = ({ shippingInfo, cart, onBack, onSuccess }) => {
-  const stripe = useStripe();
-  const elements = useElements();
+const StripePaymentForm = ({ shippingInfo, cart, onBack }) => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
-  const [cardComplete, setCardComplete] = useState(false);
 
-  // Safely calculate total - fallback to subtotal if total is missing
+  // Calculate display total with fallback
   const getDisplayTotal = () => {
-    // Try total first, then calculate from subtotal
     if (cart.total && !isNaN(parseFloat(cart.total))) {
       return parseFloat(cart.total).toFixed(2);
     }
-    
-    // Fallback: calculate from subtotal + shipping
-    const subtotal = parseFloat(cart.subtotal) || 0;
-    const shipping = parseFloat(cart.shipping_cost) || 5.00;
-    const discount = parseFloat(cart.discount_amount) || 0;
-    const total = subtotal + shipping - discount;
-    
-    return total.toFixed(2);
-  };
 
-  const handleCardChange = (event) => {
-    setCardComplete(event.complete);
-    if (event.error) {
-      setError(event.error.message);
-    } else {
-      setError(null);
-    }
+    const subtotal = parseFloat(cart.subtotal) || 0;
+    const shipping = parseFloat(cart.shipping_cost) || 5.0;
+    const discount = parseFloat(cart.discount_amount) || 0;
+    const tax = parseFloat(cart.tax) || 0;
+    const total = subtotal + shipping - discount + tax;
+
+    return total.toFixed(2);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
-      return;
-    }
-
-    if (!cardComplete) {
-      setError("Por favor completa la información de tu tarjeta");
-      return;
-    }
-
     setProcessing(true);
     setError(null);
 
     try {
-      // Create order in backend
+      // Create order with shipping info - matching your backend exactly
       const orderData = {
         email: shippingInfo.email,
         first_name: shippingInfo.first_name,
         last_name: shippingInfo.last_name,
         address_line1: shippingInfo.address,
+        address_line2: shippingInfo.address_line2 || "",
         city: shippingInfo.city,
         state: shippingInfo.state,
         postal_code: shippingInfo.postal_code,
         country: shippingInfo.country,
         phone: shippingInfo.phone,
         payment_method: "stripe",
+        // Include coupon if applied
+        coupon_code: cart.coupon?.code || "",
+        // Success/Cancel URLs
+        success_url: `${window.location.origin}/order/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${window.location.origin}/cart`,
       };
+
+      console.log("Creating order with data:", orderData);
 
       const response = await cartApi.createOrder(orderData);
 
-      if (response.data.client_secret) {
-        // Confirm payment with Stripe
-        const { error: stripeError, paymentIntent } =
-          await stripe.confirmCardPayment(response.data.client_secret, {
-            payment_method: {
-              card: elements.getElement(CardElement),
-              billing_details: {
-                name: `${shippingInfo.first_name} ${shippingInfo.last_name}`,
-                email: shippingInfo.email,
-                phone: shippingInfo.phone,
-                address: {
-                  line1: shippingInfo.address,
-                  city: shippingInfo.city,
-                  state: shippingInfo.state,
-                  postal_code: shippingInfo.postal_code,
-                  country: shippingInfo.country,
-                },
-              },
-            },
-          });
+      console.log("Order created:", response.data);
 
-        if (stripeError) {
-          setError(stripeError.message);
-          setProcessing(false);
-        } else if (paymentIntent.status === "succeeded") {
-          onSuccess(response.data.order);
-        }
-      } else if (response.data.checkout_url) {
-        // Redirect to Stripe Checkout
+      // Backend returns checkout_url - redirect to Stripe
+      if (response.data.checkout_url) {
+        console.log(
+          "Redirecting to Stripe Checkout:",
+          response.data.checkout_url
+        );
         window.location.href = response.data.checkout_url;
       } else {
-        onSuccess(response.data.order);
+        setError("No se pudo crear la sesión de pago");
+        setProcessing(false);
       }
     } catch (err) {
       console.error("Payment error:", err);
+      console.error("Error response:", err.response?.data);
       setError(
-        err.response?.data?.error || 
-        "Error procesando el pago. Por favor intenta de nuevo."
+        err.response?.data?.error ||
+          "Error procesando el pago. Por favor intenta de nuevo."
       );
       setProcessing(false);
     }
-  };
-
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#1a1a1a",
-        fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, sans-serif',
-        fontSmoothing: "antialiased",
-        "::placeholder": {
-          color: "#6b7280",
-        },
-        iconColor: "#1a1a1a",
-      },
-      invalid: {
-        color: "#c62828",
-        iconColor: "#c62828",
-      },
-    },
-    hidePostalCode: true, // We already collect this in shipping form
   };
 
   const displayTotal = getDisplayTotal();
 
   return (
     <form onSubmit={handleSubmit} className="stripe-form">
-      <div className="form-group">
-        <label>Información de la Tarjeta</label>
-        <div className={`card-element-wrapper ${error ? 'has-error' : ''} ${cardComplete ? 'complete' : ''}`}>
-          <CardElement 
-            options={cardElementOptions} 
-            onChange={handleCardChange}
-          />
-        </div>
-        <div className="card-brands">
-          <span className="card-brand-label">Aceptamos:</span>
-          <div className="card-brand-icons">
-            <svg viewBox="0 0 38 24" width="38" height="24" role="img" aria-labelledby="visa">
-              <title id="visa">Visa</title>
-              <path fill="#1434CB" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/>
-              <path fill="#fff" d="M28.3 10.1H28c-.4 1-.7 1.5-1 3h1.9c-.3-1.5-.3-2.2-.6-3zm2.9 5.9h-1.7c-.1 0-.1 0-.2-.1l-.2-.9-.1-.2h-2.4c-.1 0-.2 0-.2.2l-.3.9c0 .1-.1.1-.1.1h-2.1l.2-.5L27 8.7c0-.5.3-.7.8-.7h1.5c.1 0 .2 0 .2.2l1.4 6.5c.1.4.2.7.2 1.1.1.1.1.1.1.2zm-13.4-.3l.4-1.8c.1 0 .2.1.2.1.7.3 1.4.5 2.1.4.2 0 .5-.1.7-.2.5-.2.5-.7.1-1.1-.2-.2-.5-.3-.8-.5-.4-.2-.8-.4-1.1-.7-1.2-1-.8-2.4-.1-3.1.6-.64.3-.7 1.2-.9h2.1c.1 0 .1.1.2.1l-.3 1.5c0 .2-.1.2-.2.2s-.2-.1-.2-.1c-.7-.3-1.4-.5-2.1-.4-.2 0-.5.1-.7.2-.5.2-.5.7-.1 1.1.2.2.5.3.8.5.4.2.8.4 1.1.7 1.2 1 .8 2.4.1 3.1-.7.6-1.5.9-2.5.9-.5 0-1 0-1.4-.1-.1 0-.3 0-.4-.1-.1 0-.1-.1-.1-.2zm-3.5.3c.1-.7.1-.7.2-1 .5-2.2 1-4.5 1.4-6.7.1-.2.1-.3.3-.3H18c-.2 1.2-.4 2.1-.7 3.2-.3 1.5-.6 3-1 4.5 0 .2-.1.2-.3.2h-1.7c0 .1-.1.1-.1.1zm-4.3 0l2.1-6.9c0-.1 0-.1.1-.2h3.1c.3 0 .5 0 .7.2.5.5.5 1.1.4 1.8-.2 1.4-.9 2.3-2.1 2.6-.5.1-1 .2-1.5.2h-.6l-.4 2.2c0 .1-.1.2-.2.2h-1.6v.1z"/>
-            </svg>
-            <svg viewBox="0 0 38 24" width="38" height="24" role="img" aria-labelledby="mastercard">
-              <title id="mastercard">Mastercard</title>
-              <path fill="#000" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/>
-              <circle fill="#EB001B" cx="15" cy="12" r="7"/>
-              <circle fill="#F79E1B" cx="23" cy="12" r="7"/>
-              <path fill="#FF5F00" d="M22 12c0-2.4-1.2-4.5-3-5.7-1.8 1.3-3 3.4-3 5.7s1.2 4.5 3 5.7c1.8-1.2 3-3.3 3-5.7z"/>
-            </svg>
-            <svg viewBox="0 0 38 24" width="38" height="24" role="img" aria-labelledby="amex">
-              <title id="amex">American Express</title>
-              <path fill="#006FCF" d="M35 0H3C1.3 0 0 1.3 0 3v18c0 1.7 1.4 3 3 3h32c1.7 0 3-1.3 3-3V3c0-1.7-1.4-3-3-3z"/>
-              <path fill="#fff" d="M8.971 10.268l.774 1.876H8.203l.768-1.876zm16.075.078h-2.977v.827h2.929v1.239h-2.923v.922h2.977v.739l2.077-2.245-2.077-2.228-.006.746zm-14.063-2.34h3.995l.887 1.935.822-1.935h3.989v5.604l-3.208.018-3.91-3.97v3.97h-2.681l-.476-1.131H6.182l-.471 1.131H2.627L5.093 8.006h2.89zm12.035 5.618h-3.894l3.2-3.468h-3.2V8.006h3.894l-3.2 3.342h3.2v2.276zm6.635-5.618l2.526 2.866-2.526 2.752h2.005l1.461-1.689 1.478 1.689h1.965l-2.5-2.752 2.5-2.866h-1.965l-1.478 1.725-1.461-1.725h-2.005z"/>
-            </svg>
+      <div className="checkout-info-card">
+        <h3>Confirma tu Pedido</h3>
+
+        <div className="checkout-summary-grid">
+          <div className="summary-row">
+            <span>Subtotal:</span>
+            <span>${parseFloat(cart.subtotal || 0).toFixed(2)}</span>
           </div>
+
+          {cart.discount_amount > 0 && (
+            <div className="summary-row discount">
+              <span>
+                Descuento {cart.coupon ? `(${cart.coupon.code})` : ""}:
+              </span>
+              <span>-${parseFloat(cart.discount_amount).toFixed(2)}</span>
+            </div>
+          )}
+
+          <div className="summary-row">
+            <span>Envío:</span>
+            <span>${parseFloat(cart.shipping_cost || 5).toFixed(2)}</span>
+          </div>
+
+          {cart.tax > 0 && (
+            <div className="summary-row">
+              <span>Impuestos:</span>
+              <span>${parseFloat(cart.tax).toFixed(2)}</span>
+            </div>
+          )}
+
+          <div className="summary-row total">
+            <span>Total:</span>
+            <strong>${displayTotal}</strong>
+          </div>
+        </div>
+
+        <div className="checkout-notice">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle
+              cx="10"
+              cy="10"
+              r="9"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M10 6v5M10 13.5v.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+          <p>
+            Serás redirigido a Stripe para completar el pago de forma segura.
+          </p>
         </div>
       </div>
 
       {error && (
         <div className="payment-error">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5"/>
-            <path d="M8 4v4M8 10.5v.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            <circle
+              cx="8"
+              cy="8"
+              r="7"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+            <path
+              d="M8 4v4M8 10.5v.5"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
           </svg>
           <span>{error}</span>
         </div>
@@ -179,17 +162,26 @@ const StripePaymentForm = ({ shippingInfo, cart, onBack, onSuccess }) => {
       <button
         type="submit"
         className="payment-submit-btn"
-        disabled={!stripe || processing || !cardComplete}
+        disabled={processing}
       >
         {processing ? (
           <span className="btn-loading">
             <svg className="spinner" viewBox="0 0 24 24" width="20" height="20">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="31.4 31.4" strokeLinecap="round"/>
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="3"
+                fill="none"
+                strokeDasharray="31.4 31.4"
+                strokeLinecap="round"
+              />
             </svg>
-            Procesando...
+            Redirigiendo a Stripe...
           </span>
         ) : (
-          `Pagar $${displayTotal}`
+          `Proceder al Pago - $${displayTotal}`
         )}
       </button>
 
@@ -210,7 +202,18 @@ const StripePaymentForm = ({ shippingInfo, cart, onBack, onSuccess }) => {
             strokeLinejoin="round"
           />
         </svg>
-        <span>Tu pago está protegido con cifrado SSL</span>
+        <span>Pago 100% seguro procesado por Stripe</span>
+      </div>
+
+      <div className="accepted-payments">
+        <p>Aceptamos:</p>
+        <div className="payment-icons">
+          <span>💳 Visa</span>
+          <span>💳 Mastercard</span>
+          <span>💳 Amex</span>
+          <span>🍎 Apple Pay</span>
+          <span>📱 Google Pay</span>
+        </div>
       </div>
     </form>
   );

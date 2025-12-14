@@ -169,6 +169,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
     """
     Serializer for OrderItem model
     """
+    # Use product image if available, otherwise use stored image
+    image = serializers.SerializerMethodField()
+    
     class Meta:
         model = OrderItem
         fields = [
@@ -176,9 +179,20 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product',
             'product_name',
             'product_price',
+            'product_image',
+            'image',
             'quantity',
             'total_price'
-        ]  
+        ]
+    
+    def get_image(self, obj):
+        """Return product image if product exists, otherwise stored image"""
+        if obj.product and obj.product.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.product.image.url)
+            return obj.product.image.url
+        return obj.product_image
 
 class OrderSerializer(serializers.ModelSerializer):
     """

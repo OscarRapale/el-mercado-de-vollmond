@@ -799,3 +799,214 @@
     font-size: $fs-xl;
   }
 }
+
+// ============================================
+// CHECKOUT INFO CARD
+// ============================================
+
+.checkout-info-card {
+  background: $light-gray;
+  border-radius: $radius-lg;
+  padding: $spacing-2xl;
+  margin-bottom: $spacing-xl;
+
+  h3 {
+    font-size: $fs-xl;
+    margin-bottom: $spacing-lg;
+    color: $text-primary;
+  }
+}
+
+.checkout-summary-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: $fs-base;
+    color: $text-secondary;
+
+    &.discount {
+      color: $success;
+    }
+
+    &.total {
+      font-size: $fs-xl;
+      color: $text-primary;
+      padding-top: $spacing-md;
+      border-top: 2px solid $border-color;
+      margin-top: $spacing-sm;
+
+      strong {
+        font-weight: $fw-bold;
+        color: $emerald-green;
+      }
+    }
+  }
+}
+
+.checkout-notice {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  background: rgba($info, 0.1);
+  border: 1px solid rgba($info, 0.3);
+  border-radius: $radius-md;
+  color: $text-primary;
+
+  svg {
+    flex-shrink: 0;
+    color: $info;
+  }
+
+  p {
+    font-size: $fs-sm;
+    margin: 0;
+    line-height: $lh-relaxed;
+  }
+}
+
+.accepted-payments {
+  margin-top: $spacing-xl;
+  text-align: center;
+
+  p {
+    font-size: $fs-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.payment-icons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  font-size: $fs-sm;
+
+  span {
+    padding: $spacing-xs $spacing-sm;
+    background: $light-gray;
+    border-radius: $radius-sm;
+  }
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ============================================
+// ORDER SUCCESS STYLES  
+// ============================================
+
+.order-success-loading,
+.order-success-page {
+  min-height: 100vh;
+  @include flex-center;
+  background: $cameo;
+  padding: $spacing-4xl $spacing-xl;
+}
+
+.order-success-loading {
+  flex-direction: column;
+  gap: $spacing-xl;
+  color: $text-secondary;
+
+  .success-spinner {
+    color: $emerald-green;
+  }
+}
+
+.success-message {
+  text-align: center;
+  max-width: 600px;
+  padding: $spacing-4xl;
+  background: $cream;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-2xl;
+
+  @include mobile {
+    padding: $spacing-2xl;
+  }
+}
+
+.success-icon {
+  margin: 0 auto $spacing-2xl;
+  color: $success;
+
+  svg {
+    display: block;
+  }
+}
+
+.success-message h1 {
+  font-size: $fs-4xl;
+  color: $text-primary;
+  margin-bottom: $spacing-md;
+
+  @include mobile {
+    font-size: $fs-3xl;
+  }
+}
+
+.success-description {
+  font-size: $fs-lg;
+  color: $text-secondary;
+  line-height: $lh-relaxed;
+  margin-bottom: $spacing-xl;
+}
+
+.order-info-box {
+  padding: $spacing-lg;
+  background: $light-gray;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-2xl;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin: 0;
+    font-size: $fs-base;
+    color: $text-primary;
+
+    svg {
+      flex-shrink: 0;
+      color: $info;
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+  margin-bottom: $spacing-xl;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.redirect-message {
+  font-size: $fs-sm;
+  color: $text-secondary;
+  font-style: italic;
+  margin-top: $spacing-lg;
+}
