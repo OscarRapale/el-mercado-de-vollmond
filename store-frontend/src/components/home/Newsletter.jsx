@@ -1,25 +1,25 @@
 // src/components/home/Newsletter.jsx
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 const Newsletter = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    email: '',
+    firstName: "",
+    email: "",
     agree: false,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Newsletter signup:', formData);
+    console.log("Newsletter signup:", formData);
     // add actual functionality later
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -49,20 +49,21 @@ const Newsletter = () => {
           transition={{ duration: 0.8 }}
         >
           <h2 className="newsletter-title">
-            Subscribe to our
+            Suscribete a nuestro
             <br />
             newsletter
           </h2>
 
           <p className="newsletter-subtitle">
-            Stay informed about our latest releases
+            Descubre lo más nuevo en{" "}
+            <span className="focus-subtitle">El Mercado de Vollmond</span>
           </p>
 
           <form onSubmit={handleSubmit} className="newsletter-form">
             <input
               type="text"
               name="firstName"
-              placeholder="First Name*"
+              placeholder="Nombre*"
               value={formData.firstName}
               onChange={handleChange}
               required
@@ -72,7 +73,7 @@ const Newsletter = () => {
             <input
               type="email"
               name="email"
-              placeholder="E-mail*"
+              placeholder="Correo electrónico*"
               value={formData.email}
               onChange={handleChange}
               required
@@ -88,9 +89,9 @@ const Newsletter = () => {
                 required
               />
               <span>
-                I confirm that I have read the privacy policy and I agree to receive newsletters
-                including promotional/advertising content as well as promotional offers
-                specifically dedicated to me.
+                Confirmo que he leído la política de privacidad y acepto
+                recibir boletines informativos incluyendo contenido promocional así
+                como ofertas promocionales específicamente dedicadas a mí.
               </span>
             </label>
 

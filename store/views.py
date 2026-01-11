@@ -31,13 +31,19 @@ from .serializers import (
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
-    API endpoint for categories
-    ReadOnly = GET only (list and detail)
+    API endpoint for product categories
+    GET /api/categories/ - List all categories
+    GET /api/categories/{id}/ - Get single category
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [AllowAny]
     lookup_field = "slug"
+    
+    def get_serializer_context(self):
+        """Pass request to serializer for absolute URLs"""
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     """

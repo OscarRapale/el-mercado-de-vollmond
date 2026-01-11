@@ -211,7 +211,7 @@ const Navbar = () => {
                       {/* Image Preview */}
                       <div className="preview-area">
                         <AnimatePresence mode="wait">
-                          {hoveredCategory && categoryProducts.length > 0 ? (
+                          {hoveredCategory && categoryProducts.length > 0 && (
                             <motion.div
                               key={hoveredCategory.id}
                               variants={imageVariants}
@@ -226,17 +226,6 @@ const Navbar = () => {
                                   alt={categoryProducts[0].name}
                                 />
                               </div>
-                            </motion.div>
-                          ) : (
-                            <motion.div
-                              key="placeholder"
-                              variants={imageVariants}
-                              initial="hidden"
-                              animate="visible"
-                              exit="exit"
-                              className="preview-placeholder"
-                            >
-                              <p>Hover over a category to preview</p>
                             </motion.div>
                           )}
                         </AnimatePresence>

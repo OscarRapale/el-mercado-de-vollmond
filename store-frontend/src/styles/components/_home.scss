@@ -163,7 +163,7 @@
 }
 
 .category-header {
-  @include flex-between;
+  text-align: center;
   margin-bottom: $spacing-2xl;
 
   @include mobile {
@@ -174,56 +174,31 @@
 
 .category-title {
   font-family: $font-heading;
-  font-size: $fs-3xl;
-  font-weight: $fw-semibold;
-  color: $text-secondary;
-  text-transform: lowercase;
+  font-size: $fs-6xl;
+  font-weight: $fw-medium;
+  color: $text-primary;
+  padding-bottom: $spacing-xl;
 
   @include mobile {
     font-size: $fs-2xl;
   }
 }
 
-.category-nav-buttons {
-  display: flex;
-  gap: $spacing-md;
-}
-
-.category-nav-btn {
-  width: 50px;
-  height: 50px;
-  border: 1px solid $border-color;
-  border-radius: $radius-full;
-  background: $cream;
-  color: $text-primary;
-  font-size: $fs-xl;
-  cursor: pointer;
-  transition: all $transition-fast;
-
-  &:hover {
-    background: $charcoal;
-    color: $cream;
-    border-color: $charcoal;
-  }
-}
-
 .category-scroll {
-  display: flex;
-  gap: $spacing-xl;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding-bottom: $spacing-lg;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-lg;
+  padding-bottom: 8rem;
 
-  /* Hide scrollbar */
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
+  @include mobile {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-lg;
   }
 }
 
 .category-card {
   flex-shrink: 0;
-  width: 300px;
+  width: 100%;
   background: $cream;
   border-radius: $radius-lg;
   overflow: hidden;
@@ -241,8 +216,9 @@
 }
 
 .category-card-image {
+  position: relative;
   width: 100%;
-  height: 300px;
+  height: 400px;
   overflow: hidden;
 
   img {
@@ -251,6 +227,21 @@
     object-fit: cover;
     transition: transform $transition-slow;
   }
+
+  @include mobile {
+    height: 300px;
+  }
+}
+
+.category-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-xl;
+  background: rgba($gold, 0.50);
+  backdrop-filter: blur(10px);
+  text-align: center;
 }
 
 .category-card-content {
@@ -259,16 +250,15 @@
 }
 
 .category-card-title {
-  font-size: $fs-xl;
+  font-size: $fs-4xl;
   font-weight: $fw-medium;
-  color: $text-primary;
+  color: $charcoal;
   margin-bottom: $spacing-sm;
 }
 
 .category-card-subtitle {
   font-size: $fs-sm;
   color: $gold;
-  text-transform: lowercase;
 }
 
 // ============================================
@@ -276,7 +266,7 @@
 // ============================================
 
 .newsletter-section {
-  background: $gold-light;
+  background: $emerald-green;
 }
 
 .newsletter-grid {
@@ -314,10 +304,10 @@
 
 .newsletter-title {
   font-family: $font-heading;
-  font-size: $fs-4xl;
-  font-weight: $fw-semibold;
+  font-size: $fs-5xl;
+  font-weight: $fw-medium;
   line-height: $lh-tight;
-  color: $text-primary;
+  color: $cream;
   margin-bottom: $spacing-lg;
 
   @include mobile {
@@ -327,8 +317,12 @@
 
 .newsletter-subtitle {
   font-size: $fs-base;
-  color: $text-primary;
+  color: $cream;
   margin-bottom: $spacing-2xl;
+}
+
+.focus-subtitle {
+  color: $gold;
 }
 
 .newsletter-form {
@@ -343,16 +337,16 @@
   border-bottom: 1px solid transparent;
   background: transparent;
   font-size: $fs-base;
-  color: $text-primary;
+  color: $cameo;
   transition: border-color $transition-fast;
 
   &:focus {
     outline: none;
-    border-bottom-color: $light-blue;
+    border-bottom-color: $gold-light;
   }
 
   &::placeholder {
-    color: $text-secondary;
+    color: $cream;
   }
 }
 
@@ -360,7 +354,7 @@
   display: flex;
   gap: $spacing-md;
   font-size: $fs-sm;
-  color: $text-primary;
+  color: $cream;
   cursor: pointer;
 
   input[type="checkbox"] {

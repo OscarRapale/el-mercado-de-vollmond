@@ -8,9 +8,20 @@ class CategorySerializer(serializers.ModelSerializer):
     Serializer for Category model
     Converts Category objects to/from JSON
     """
+    image = serializers.SerializerMethodField()
+    
     class Meta:
         model = Category
-        fields = ["id", "name", "slug", "description"]
+        fields = ["id", "name", "slug", "description", "image"]
+    
+    def get_image(self, obj):
+        """Return absolute URL for category image"""
+        if obj.image:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            return obj.image.url
+        return None
 
 class ProductSerializer(serializers.ModelSerializer):
     """
