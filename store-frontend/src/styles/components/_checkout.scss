@@ -912,101 +912,200 @@
 }
 
 // ============================================
-// ORDER SUCCESS STYLES  
+// ORDER SUCCESS OVERLAY & CARD
 // ============================================
 
-.order-success-loading,
-.order-success-page {
-  min-height: 100vh;
-  @include flex-center;
-  background: $cameo;
-  padding: $spacing-4xl $spacing-xl;
+.order-success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+
+  @include mobile {
+    padding: $spacing-lg;
+  }
 }
 
-.order-success-loading {
-  flex-direction: column;
-  gap: $spacing-xl;
-  color: $text-secondary;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Loading Card
+.success-loading-card {
+  background: $cream;
+  border-radius: $radius-xl;
+  padding: $spacing-4xl;
+  text-align: center;
+  box-shadow: $shadow-2xl;
 
   .success-spinner {
     color: $emerald-green;
+    margin-bottom: $spacing-lg;
   }
-}
-
-.success-message {
-  text-align: center;
-  max-width: 600px;
-  padding: $spacing-4xl;
-  background: $cream;
-  border-radius: $radius-xl;
-  box-shadow: $shadow-2xl;
-
-  @include mobile {
-    padding: $spacing-2xl;
-  }
-}
-
-.success-icon {
-  margin: 0 auto $spacing-2xl;
-  color: $success;
-
-  svg {
-    display: block;
-  }
-}
-
-.success-message h1 {
-  font-size: $fs-4xl;
-  color: $text-primary;
-  margin-bottom: $spacing-md;
-
-  @include mobile {
-    font-size: $fs-3xl;
-  }
-}
-
-.success-description {
-  font-size: $fs-lg;
-  color: $text-secondary;
-  line-height: $lh-relaxed;
-  margin-bottom: $spacing-xl;
-}
-
-.order-info-box {
-  padding: $spacing-lg;
-  background: $light-gray;
-  border-radius: $radius-md;
-  margin-bottom: $spacing-2xl;
 
   p {
-    display: flex;
-    align-items: center;
-    gap: $spacing-sm;
+    font-size: $fs-lg;
+    color: $text-secondary;
     margin: 0;
-    font-size: $fs-base;
-    color: $text-primary;
+  }
+}
+
+// Success Card
+.success-card {
+  position: relative;
+  width: 100%;
+  max-width: 550px;
+  z-index: 10000;
+}
+
+.success-card-content {
+  background: $emerald-green;
+  border-radius: $radius-xl;
+  padding: $spacing-4xl $spacing-3xl;
+  text-align: center;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+
+  @include mobile {
+    padding: $spacing-3xl $spacing-2xl;
+    border-radius: $radius-xl;
+  }
+}
+
+// Success Checkmark
+.success-checkmark {
+  margin: 0 auto $spacing-2xl;
+  
+  svg {
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
+  }
+
+  @include mobile {
+    margin-bottom: $spacing-xl;
 
     svg {
-      flex-shrink: 0;
-      color: $info;
+      width: 80px;
+      height: 80px;
     }
   }
 }
 
-.action-buttons {
-  display: flex;
-  gap: $spacing-md;
-  justify-content: center;
+// Amount Display
+.success-amount {
+  font-size: 64px;
+  font-weight: $fw-bold;
+  color: $cream;
   margin-bottom: $spacing-xl;
+  line-height: 1;
+  letter-spacing: -2px;
 
   @include mobile {
-    flex-direction: column;
+    font-size: 48px;
   }
 }
 
-.redirect-message {
-  font-size: $fs-sm;
-  color: $text-secondary;
-  font-style: italic;
-  margin-top: $spacing-lg;
+// Success Text
+.success-text {
+  margin-bottom: $spacing-3xl;
+
+  h2 {
+    font-size: $fs-2xl;
+    font-weight: $fw-semibold;
+    color: $cream;
+    margin-bottom: $spacing-md;
+
+    @include mobile {
+      font-size: $fs-xl;
+    }
+  }
+
+  p {
+    font-size: $fs-base;
+    color: rgba($cream, 0.95);
+    line-height: $lh-relaxed;
+    margin: 0;
+
+    strong {
+      font-weight: $fw-semibold;
+      color: $cream;
+    }
+
+    @include mobile {
+      font-size: $fs-sm;
+    }
+  }
+}
+
+// Action Buttons
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.success-continue-btn {
+  width: 100%;
+  padding: $spacing-lg $spacing-2xl;
+  background: $cream;
+  color: $emerald-green;
+  border: none;
+  border-radius: $radius-full;
+  font-size: $fs-lg;
+  font-weight: $fw-bold;
+  cursor: pointer;
+  transition: all $transition-base;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: darken($cream, 3%);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  @include mobile {
+    font-size: $fs-base;
+    padding: $spacing-md $spacing-xl;
+  }
+}
+
+.success-orders-link {
+  width: 100%;
+  padding: $spacing-md;
+  background: transparent;
+  color: $cream;
+  border: none;
+  font-size: $fs-base;
+  font-weight: $fw-medium;
+  cursor: pointer;
+  transition: all $transition-fast;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  @include mobile {
+    font-size: $fs-sm;
+  }
 }

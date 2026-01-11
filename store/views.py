@@ -249,7 +249,7 @@ class CartViewSet(viewsets.ModelViewSet):
                     {"error": f"{field} is required"}
                 )
             
-        # Get coupon code if provided - NEW!
+        # Get coupon code if provided
         coupon_code = request.data.get('coupon_code', '').strip()
         coupon = None
         discount_amount = Decimal('0.00')
@@ -468,6 +468,30 @@ class OrderViewSet(viewsets.ReadOnlyModelViewSet):
         Return orders for current user only
         """
         return Order.objects.filter(user=self.request.user)
+
+    @action(detail=False, methods=['get'], url_path='by-session/(?P<session_id>[^/.]+)')
+    def by_session(self, request, session_id=None):
+        """
+        GET /api/orders/by-session/{session_id}/
+        Get order by Stripe session ID
+        """
+        try:
+            order = Order.objects.get(
+                stripe_payment_intent_id=session_id,
+                user=request.user
+            )
+            return Response({
+                'order_id': order.id,
+                'order_number': order.order_number,
+                'total': str(order.total),
+                'status': order.status,
+                'payment_status': order.payment_status,
+            })
+        except Order.DoesNotExist:
+            return Response(
+                {'error': 'Order not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
     @action(detail=True, methods=['get'])
     def tracking(self, request, pk=None):
