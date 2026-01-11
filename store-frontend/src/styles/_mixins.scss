@@ -9,8 +9,16 @@
   }
 }
 
+// This now targets tablets AND below (mobile + tablet)
 @mixin tablet {
-  @media (min-width: $breakpoint-sm) and (max-width: ($breakpoint-md - 1)) {
+  @media (max-width: ($breakpoint-lg - 1)) {
+    @content;
+  }
+}
+
+// Tablet only (specific range)
+@mixin tablet-only {
+  @media (min-width: $breakpoint-sm) and (max-width: ($breakpoint-lg - 1)) {
     @content;
   }
 }
@@ -50,7 +58,7 @@
   max-width: $container-max-width;
   margin: 0 auto;
   padding: 0 $container-padding;
-  
+
   @include mobile {
     padding: 0 $spacing-md;
   }
@@ -69,7 +77,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   display: inline-block;
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -83,7 +91,7 @@
   box-shadow: $shadow-md;
   padding: $spacing-xl;
   transition: transform $transition-base, box-shadow $transition-base;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: $shadow-xl;
@@ -93,9 +101,9 @@
 // Overlay
 @mixin overlay($opacity: 0.7) {
   position: relative;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;

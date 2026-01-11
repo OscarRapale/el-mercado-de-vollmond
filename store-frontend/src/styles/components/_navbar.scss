@@ -11,6 +11,7 @@
 
   &.navbar-scrolled {
     background: rgba($emerald-green, 0.8);
+    backdrop-filter: blur(10px);
     box-shadow: $shadow-lg;
   }
 }
@@ -22,7 +23,7 @@
   padding-bottom: $spacing-lg;
   gap: $spacing-2xl;
 
-  @include mobile {
+  @include tablet {
     padding-top: $spacing-md;
     padding-bottom: $spacing-md;
   }
@@ -46,6 +47,27 @@
   text-decoration: none;
 }
 
+.desktop-logo {
+  display: block;
+
+  @include tablet {
+    display: none;
+  }
+}
+
+.mobile-logo {
+  display: none;
+
+  @include tablet {
+    display: block;
+  }
+
+  img {
+    height: 40px;
+    width: auto;
+  }
+}
+
 .logo-text {
   margin: 0;
   font-family: $font-accent;
@@ -54,11 +76,6 @@
   letter-spacing: 3px;
   display: flex;
   gap: $spacing-xs;
-
-  @include mobile {
-    font-size: $fs-lg;
-    letter-spacing: 2px;
-  }
 }
 
 .logo-main {
@@ -80,8 +97,8 @@
   flex: 1;
   justify-content: center;
 
-  @include mobile {
-    display: none; // Hide on mobile, show hamburger instead
+  @include tablet {
+    display: none;
   }
 }
 
@@ -105,10 +122,6 @@
     border: 1px solid $charcoal;
     color: $charcoal;
     border-radius: $radius-sm;
-    
-    &::after {
-      width: 100%;
-    }
   }
 }
 
@@ -121,6 +134,12 @@
   align-items: center;
   gap: $spacing-lg;
   flex-shrink: 0;
+}
+
+.desktop-only {
+  @include tablet {
+    display: none;
+  }
 }
 
 .navbar-icon-btn {
@@ -163,7 +182,234 @@
 }
 
 // ============================================
-// MEGA MENU
+// HAMBURGER MENU BUTTON
+// ============================================
+
+.hamburger-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: $z-modal + 10;
+
+  @include tablet {
+    display: flex;
+  }
+}
+
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: $charcoal;
+  transition: all 0.3s ease;
+  transform-origin: center;
+
+  &.open {
+    &:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    &:nth-child(2) {
+      opacity: 0;
+    }
+
+    &:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+  }
+}
+
+// ============================================
+// MOBILE MENU
+// ============================================
+
+.mobile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($charcoal, 0.5);
+  z-index: $z-modal - 1;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 85%;
+  max-width: 400px;
+  height: 100vh;
+  background: $cream;
+  z-index: $z-modal;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: $spacing-xl;
+  border-bottom: 1px solid $warm-gray;
+}
+
+.mobile-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $charcoal;
+  padding: $spacing-sm;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $burgundy;
+  }
+}
+
+.mobile-menu-content {
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.mobile-menu-item {
+  width: 100%;
+}
+
+.mobile-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: $spacing-lg $spacing-md;
+  font-size: $fs-2xl;
+  font-weight: $fw-medium;
+  color: $charcoal;
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: $light-gray;
+    color: $burgundy;
+  }
+
+  &.has-submenu {
+    .submenu-arrow {
+      transition: transform 0.3s ease;
+
+      &.open {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &.logout-btn {
+    color: $burgundy;
+    margin-top: $spacing-xl;
+    border-top: 1px solid $warm-gray;
+    padding-top: $spacing-xl;
+    border-radius: 0;
+  }
+}
+
+// ============================================
+// MOBILE PRODUCTS DROPDOWN
+// ============================================
+
+.mobile-products-dropdown {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 85%;
+  max-width: 400px;
+  height: 100vh;
+  background: $semi-gold-dark;
+  z-index: $z-modal + 5;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobile-products-header {
+  padding: $spacing-xl;
+  border-bottom: 1px solid rgba($charcoal, 0.1);
+}
+
+.mobile-back-btn {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $charcoal;
+  font-size: $fs-base;
+  font-weight: $fw-medium;
+  padding: $spacing-sm;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $emerald-green;
+  }
+}
+
+.mobile-categories-list {
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.mobile-category-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg $spacing-md;
+  font-size: $fs-xl;
+  font-weight: $fw-medium;
+  color: $charcoal;
+  text-decoration: none;
+  border-radius: $radius-md;
+  transition: all $transition-fast;
+
+  .category-arrow {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all $transition-fast;
+  }
+
+  &:hover {
+    background: rgba($charcoal, 0.05);
+
+    .category-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  &.view-all {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-xl;
+    border-top: 1px solid rgba($charcoal, 0.1);
+    font-weight: $fw-medium;
+  }
+}
+
+// ============================================
+// MEGA MENU (Desktop)
 // ============================================
 
 .navbar-dropdown {
@@ -183,11 +429,8 @@
   z-index: -1;
   pointer-events: all;
 
-  @include mobile {
-    width: 90vw;
-    max-width: 400px;
-    left: auto;
-    right: 0;
+  @include tablet {
+    display: none;
   }
 }
 
@@ -197,11 +440,6 @@
   max-width: 1600px;
   min-height: 600px;
   margin: 0 auto;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-  }
 }
 
 // Categories List
@@ -209,11 +447,6 @@
   padding-right: $spacing-4xl;
   padding-top: 3rem;
   line-height: 1em;
-  
-  @include mobile {
-    border-right: none;
-    border-bottom: 1px solid $warm-gray;
-  }
 }
 
 .category-link {
@@ -240,7 +473,7 @@
     border: 1px solid $charcoal;
     color: $charcoal;
     box-shadow: $shadow-sm;
-    
+
     .category-arrow {
       opacity: 1;
       transform: translateX(0);
@@ -272,7 +505,7 @@
     border: 1px solid $charcoal;
     color: $charcoal;
     box-shadow: $shadow-sm;
-    
+
     .category-arrow {
       opacity: 1;
       transform: translateX(0);
@@ -288,10 +521,6 @@
   flex-direction: column;
   gap: $spacing-lg;
   position: relative;
-
-  @include mobile {
-    display: none;
-  }
 }
 
 .preview-content {
@@ -353,20 +582,19 @@
 }
 
 // ============================================
-// USER DROPDOWN
+// USER DROPDOWN (Desktop)
 // ============================================
 
 .navbar-dropdown {
   position: relative;
-  
-  // Add invisible bridge area
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 100%;
     left: -$spacing-md;
     right: -$spacing-md;
-    height: $spacing-md; // Bridge height
+    height: $spacing-md;
     background: transparent;
     z-index: 99;
   }
@@ -375,8 +603,8 @@
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: calc(100% + $spacing-md); // Match bridge height
-  right: 0; // Changed from -$spacing-sm for better alignment
+  top: calc(100% + $spacing-md);
+  right: 0;
   background: $cream;
   border-radius: $radius-lg;
   box-shadow: $shadow-xl;
@@ -386,7 +614,6 @@
   z-index: 100;
 }
 
-// Show dropdown on hover of parent container
 .navbar-dropdown:hover .dropdown-menu {
   display: block;
 }
@@ -407,6 +634,6 @@
 
   &:hover {
     background: $light-gray;
-    color: $burgundy;
+    color: $emerald-green;
   }
 }
