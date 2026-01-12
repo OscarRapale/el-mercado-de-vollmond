@@ -125,7 +125,7 @@ const Navbar = () => {
       y: "-100%",
       opacity: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.7,
         ease: [0.65, 0, 0.35, 1],
       },
     },

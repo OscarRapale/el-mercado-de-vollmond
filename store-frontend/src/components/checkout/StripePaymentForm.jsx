@@ -1,6 +1,13 @@
 // src/components/checkout/StripePaymentForm.jsx
 import React, { useState } from "react";
 import { cart as cartApi } from "../../services/api";
+import {
+  FaCcVisa,
+  FaCcMastercard,
+  FaCcAmex,
+  FaApplePay,
+  FaGooglePay,
+} from "react-icons/fa";
 
 const StripePaymentForm = ({ shippingInfo, cart, onBack }) => {
   const [processing, setProcessing] = useState(false);
@@ -208,11 +215,21 @@ const StripePaymentForm = ({ shippingInfo, cart, onBack }) => {
       <div className="accepted-payments">
         <p>Aceptamos:</p>
         <div className="payment-icons">
-          <span>💳 Visa</span>
-          <span>💳 Mastercard</span>
-          <span>💳 Amex</span>
-          <span>🍎 Apple Pay</span>
-          <span>📱 Google Pay</span>
+          <span>
+            <FaCcVisa size={40} />
+          </span>
+          <span>
+            <FaCcMastercard size={40} />
+          </span>
+          <span>
+            <FaCcAmex size={40} />
+          </span>
+          <span>
+            <FaApplePay size={40} />
+          </span>
+          <span>
+            <FaGooglePay size={40} />
+          </span>
         </div>
       </div>
     </form>

@@ -422,12 +422,14 @@
   width: 60px;
   height: 60px;
   border-radius: $radius-md;
-  overflow: hidden;
+  overflow: visible; // Changed from hidden to visible
   background: $light-gray;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border-radius: $radius-md; // Add border-radius to image
   }
 }
 
@@ -444,6 +446,7 @@
   font-weight: $fw-bold;
   border-radius: $radius-full;
   border: 2px solid $cream;
+  z-index: 1;
 }
 
 .more-items {

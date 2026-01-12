@@ -348,7 +348,7 @@
   &.has-error {
     border-color: $error;
     background: rgba($error, 0.02);
-    
+
     &:focus-within {
       box-shadow: 0 0 0 3px rgba($error, 0.1);
     }
@@ -356,7 +356,7 @@
 
   &.complete {
     border-color: $success;
-    
+
     &:focus-within {
       box-shadow: 0 0 0 3px rgba($success, 0.1);
     }
@@ -368,16 +368,16 @@
   align-items: center;
   gap: $spacing-sm;
   margin-top: $spacing-md;
-  
+
   .card-brand-label {
     font-size: $fs-xs;
     color: $text-secondary;
   }
-  
+
   .card-brand-icons {
     display: flex;
     gap: $spacing-xs;
-    
+
     svg {
       border-radius: 4px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -416,7 +416,7 @@
   color: $text-secondary;
 
   &::before {
-    content: '';
+    content: "";
     width: 40px;
     height: 40px;
     border: 3px solid $border-color;
@@ -572,7 +572,7 @@
   width: 60px;
   height: 60px;
   border-radius: $radius-md;
-  overflow: hidden;
+  overflow: visible;
   background: $light-gray;
   flex-shrink: 0;
 
@@ -580,6 +580,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    border-radius: $radius-md;
   }
 }
 
@@ -596,6 +597,7 @@
   font-weight: $fw-bold;
   border-radius: $radius-full;
   border: 2px solid $cream;
+  z-index: 1;
 }
 
 .summary-item-details {
@@ -882,15 +884,21 @@
 
 .payment-icons {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: $spacing-md;
-  font-size: $fs-sm;
+  align-items: center;
 
   span {
-    padding: $spacing-xs $spacing-sm;
-    background: $light-gray;
-    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $fs-sm;
+    color: $medium-gray;
+
+    svg {
+      font-size: $fs-2xl;
+      color: $charcoal;
+    }
   }
 }
 
@@ -977,8 +985,7 @@
   border-radius: $radius-xl;
   padding: $spacing-4xl $spacing-3xl;
   text-align: center;
-  box-shadow: 
-    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
     0 0 0 1px rgba(255, 255, 255, 0.1);
   position: relative;
 
@@ -991,7 +998,7 @@
 // Success Checkmark
 .success-checkmark {
   margin: 0 auto $spacing-2xl;
-  
+
   svg {
     filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.15));
   }

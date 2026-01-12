@@ -44,7 +44,7 @@ const PaymentForm = ({
             </svg>
             <div>
               <strong>Pago con Stripe</strong>
-              <p>Tarjeta, Apple Pay, Google Pay y más</p>
+              <p>Débito, Credito, Apple Pay, Google Pay y más</p>
             </div>
           </div>
         </label>
