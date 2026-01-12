@@ -100,7 +100,7 @@ const ProductInfo = ({ product, openPanel, onProductUpdate }) => {
           onClick={handleAddToCart}
           disabled={isAdding || product.stock === 0}
         >
-          {isAdding ? "ADDING..." : "ADD TO CART"}
+          {isAdding ? "AÑADIENDO..." : "AÑADIR AL CARRITO"}
         </button>
       </div>
     </div>

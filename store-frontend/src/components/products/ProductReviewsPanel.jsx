@@ -98,7 +98,7 @@ const ProductReviewsPanel = ({ product, onClose, onReviewSubmitted }) => {
     >
       {/* Close Button */}
       <button className="panel-close-btn" onClick={onClose}>
-        CERRAR <span className="close-x">✕</span>
+        <span className="close-x">✕</span>
       </button>
 
       {/* Panel Content */}
