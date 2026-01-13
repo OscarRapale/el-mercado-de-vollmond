@@ -1,0 +1,139 @@
+// ============================================
+// REGISTER PAGE
+// ============================================
+.register-page {
+  min-height: 100vh;
+  @include flex-center;
+  padding: $spacing-4xl $spacing-xl;
+  background: linear-gradient(135deg, $charcoal 0%, $emerald-green 100%);
+  @include mobile {
+    padding: $spacing-2xl $spacing-lg;
+  }
+}
+.register-container {
+  width: 100%;
+  max-width: 600px;
+}
+.register-card {
+  background: $cream;
+  border-radius: $radius-xl;
+  padding: $spacing-3xl;
+  box-shadow: $shadow-2xl;
+  @include mobile {
+    padding: $spacing-2xl;
+  }
+}
+.register-header {
+  text-align: center;
+  margin-bottom: $spacing-2xl;
+  h2 {
+    font-size: $fs-4xl;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+    @include mobile {
+      font-size: $fs-3xl;
+    }
+  }
+  p {
+    color: $text-secondary;
+    font-size: $fs-lg;
+  }
+}
+.register-error {
+  padding: $spacing-md $spacing-lg;
+  background: rgba($error, 0.1);
+  color: $error;
+  border-radius: $radius-md;
+  font-size: $fs-base;
+  border-left: 4px solid $error;
+  margin-bottom: $spacing-xl;
+}
+.register-form {
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+  .form-group {
+    margin-bottom: $spacing-lg;
+    label {
+      display: block;
+      font-size: $fs-sm;
+      font-weight: $fw-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-sm;
+    }
+
+    input {
+      width: 100%;
+      padding: $spacing-md;
+      border: 1px solid $border-color;
+      border-radius: $radius-md;
+      font-size: $fs-base;
+      transition: border-color $transition-fast;
+
+      &:focus {
+        outline: none;
+        border-color: $emerald-green;
+        box-shadow: 0 0 0 3px rgba($emerald-green, 0.1);
+      }
+
+      &.error {
+        border-color: $error;
+      }
+    }
+
+    .error-message {
+      display: block;
+      font-size: $fs-xs;
+      color: $error;
+      margin-top: $spacing-xs;
+    }
+  }
+  .register-btn {
+    width: 100%;
+    padding: $spacing-lg;
+    background: $emerald-green;
+    color: $cream;
+    border: none;
+    border-radius: $radius-full;
+    font-size: $fs-lg;
+    font-weight: $fw-bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all $transition-base;
+    margin-top: $spacing-md;
+    &:hover:not(:disabled) {
+      background: $light-green;
+      transform: translateY(-2px);
+      box-shadow: $shadow-lg;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+.register-footer {
+  margin-top: $spacing-xl;
+  text-align: center;
+  padding-top: $spacing-xl;
+  border-top: 1px solid $border-color;
+  p {
+    color: $text-secondary;
+    font-size: $fs-base;
+  }
+  a {
+    color: $emerald-green;
+    font-weight: $fw-semibold;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

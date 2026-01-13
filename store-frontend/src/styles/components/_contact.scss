@@ -1,0 +1,235 @@
+// ============================================
+// CONTACT PAGE
+// ============================================
+.contact-page {
+background: $cameo;
+}
+.contact-hero {
+position: relative;
+height: 50vh;
+min-height: 350px;
+@include flex-center;
+background-image: url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1920&q=80');
+background-size: cover;
+background-position: center;
+@include mobile {
+height: 40vh;
+min-height: 250px;
+}
+}
+.contact-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba($charcoal, 0.85) 0%, rgba($emerald-green, 0.75) 100%);
+}
+
+.contact-hero-content {
+position: relative;
+z-index: 2;
+text-align: center;
+color: $cream;
+}
+.contact-hero-title {
+font-size: $fs-5xl;
+font-weight: $fw-bold;
+margin-bottom: $spacing-md;
+@include mobile {
+font-size: $fs-3xl;
+}
+}
+.contact-hero-subtitle {
+font-size: $fs-xl;
+color: rgba($cream, 0.9);
+@include mobile {
+font-size: $fs-lg;
+}
+}
+// Contact Content
+.contact-content {
+padding: $spacing-4xl 0;
+@include mobile {
+padding: $spacing-2xl 0;
+}
+}
+.contact-container {
+@include container;
+}
+.contact-grid {
+display: grid;
+grid-template-columns: 1fr 1.5fr;
+gap: $spacing-4xl;
+@include mobile {
+grid-template-columns: 1fr;
+gap: $spacing-2xl;
+}
+}
+// Contact Info
+.contact-info {
+background: $cream;
+padding: $spacing-3xl;
+border-radius: $radius-xl;
+box-shadow: $shadow-md;
+@include mobile {
+padding: $spacing-xl;
+}
+h2 {
+font-size: $fs-3xl;
+margin-bottom: $spacing-lg;
+color: $text-primary;
+}
+.contact-intro {
+font-size: $fs-base;
+line-height: $lh-relaxed;
+color: $text-secondary;
+margin-bottom: $spacing-2xl;
+}
+}
+.contact-methods {
+display: flex;
+flex-direction: column;
+gap: $spacing-xl;
+margin-bottom: $spacing-3xl;
+}
+.contact-method {
+display: flex;
+gap: $spacing-lg;
+padding: $spacing-lg;
+background: $light-gray;
+border-radius: $radius-md;
+.method-icon {
+@include flex-center;
+width: 50px;
+height: 50px;
+background: $emerald-green;
+color: $cream;
+border-radius: $radius-md;
+flex-shrink: 0;
+}
+.method-info {
+h3 {
+font-size: $fs-lg;
+margin-bottom: $spacing-xs;
+color: $text-primary;
+}
+p {
+  font-size: $fs-base;
+  color: $text-secondary;
+}
+}
+}
+// Social Links
+.social-links {
+h3 {
+font-size: $fs-lg;
+margin-bottom: $spacing-md;
+color: $text-primary;
+}
+}
+.social-icons {
+display: flex;
+gap: $spacing-md;
+}
+.social-icon {
+@include flex-center;
+width: 50px;
+height: 50px;
+background: $light-gray;
+color: $text-primary;
+border-radius: $radius-md;
+transition: all $transition-base;
+&:hover {
+background: $emerald-green;
+color: $cream;
+transform: translateY(-2px);
+}
+}
+// Contact Form
+.contact-form-wrapper {
+background: $cream;
+padding: $spacing-3xl;
+border-radius: $radius-xl;
+box-shadow: $shadow-md;
+@include mobile {
+padding: $spacing-xl;
+}
+}
+.contact-form {
+h2 {
+font-size: $fs-3xl;
+margin-bottom: $spacing-2xl;
+color: $text-primary;
+}
+.form-group {
+margin-bottom: $spacing-lg;
+label {
+  display: block;
+  font-size: $fs-base;
+  font-weight: $fw-semibold;
+  color: $text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  font-size: $fs-base;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    outline: none;
+    border-color: $emerald-green;
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+}
+.form-status {
+padding: $spacing-md;
+border-radius: $radius-md;
+margin-bottom: $spacing-lg;
+font-size: $fs-base;
+&.success {
+  background: rgba($success, 0.1);
+  color: $success;
+  border: 1px solid $success;
+}
+
+&.error {
+  background: rgba($error, 0.1);
+  color: $error;
+  border: 1px solid $error;
+}
+}
+.submit-btn {
+width: 100%;
+padding: $spacing-lg;
+background: $emerald-green;
+color: $cream;
+border: none;
+border-radius: $radius-full;
+font-size: $fs-lg;
+font-weight: $fw-bold;
+text-transform: uppercase;
+letter-spacing: 1px;
+cursor: pointer;
+transition: all $transition-base;
+&:hover:not(:disabled) {
+  background: $light-green;
+  transform: translateY(-2px);
+  box-shadow: $shadow-lg;
+}
+
+&:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+}
+}

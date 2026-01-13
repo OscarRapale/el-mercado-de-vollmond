@@ -7,6 +7,7 @@ import {
   FaCcAmex,
   FaApplePay,
   FaGooglePay,
+  FaCcDiscover,
 } from "react-icons/fa";
 
 const StripePaymentForm = ({ shippingInfo, cart, onBack }) => {
@@ -215,21 +216,12 @@ const StripePaymentForm = ({ shippingInfo, cart, onBack }) => {
       <div className="accepted-payments">
         <p>Aceptamos:</p>
         <div className="payment-icons">
-          <span>
-            <FaCcVisa size={40} />
-          </span>
-          <span>
-            <FaCcMastercard size={40} />
-          </span>
-          <span>
-            <FaCcAmex size={40} />
-          </span>
-          <span>
-            <FaApplePay size={40} />
-          </span>
-          <span>
-            <FaGooglePay size={40} />
-          </span>
+          <FaCcVisa size={45} />
+          <FaCcMastercard size={45} />
+          <FaCcDiscover size={45} />
+          <FaCcAmex size={45} />
+          <FaApplePay size={45} />
+          <FaGooglePay size={45} />
         </div>
       </div>
     </form>

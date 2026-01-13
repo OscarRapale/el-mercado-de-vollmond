@@ -3,20 +3,24 @@
 // ============================================
 
 // Fonts
-@import 'fonts';
+@import "fonts";
 
 // Base
-@import 'variables';
-@import 'mixins';
-@import 'base';
-@import 'typography';
-@import 'buttons';
+@import "variables";
+@import "mixins";
+@import "base";
+@import "typography";
+@import "buttons";
 
 // Components
-@import 'components/navbar';
-@import 'components/home';
-@import 'components/products';
-@import 'components/product-details';
-@import 'components/cart';
-@import 'components/checkout';
-@import 'components/orders';
+@import "components/navbar";
+@import "components/home";
+@import "components/products";
+@import "components/product-details";
+@import "components/cart";
+@import "components/checkout";
+@import "components/orders";
+@import "components/about";
+@import "components/contact";
+@import "components/register";
+@import "components/profile";

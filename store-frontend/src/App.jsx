@@ -12,6 +12,10 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import Orders from "./pages/Orders";
 import OrderDetail from "./pages/OrderDetail";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 import Login from "./pages/Login";
 
 function App() {
@@ -31,6 +35,10 @@ function App() {
               <Route path="/order/success" element={<OrderSuccess />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/orders/:orderId" element={<OrderDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
             </Routes>
           </div>
